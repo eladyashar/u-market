@@ -7,10 +7,10 @@ namespace u_market.Models
 {
     public class Product
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public string Description { get; set; }
-        public Store StoreId { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public double price { get; set; }
+        public string description { get; set; }
+        public Store store { get; set; }
     }
 }
