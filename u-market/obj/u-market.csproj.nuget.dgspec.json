@@ -1,30 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/eladyashar/Projects/u-market/u-market/u-market.csproj": {}
+    "C:\\Users\\Uriel\\Desktop\\U_Market\\u-market\\u-market\\u-market.csproj": {}
   },
   "projects": {
-    "/Users/eladyashar/Projects/u-market/u-market/u-market.csproj": {
+    "C:\\Users\\Uriel\\Desktop\\U_Market\\u-market\\u-market\\u-market.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/eladyashar/Projects/u-market/u-market/u-market.csproj",
+        "projectUniqueName": "C:\\Users\\Uriel\\Desktop\\U_Market\\u-market\\u-market\\u-market.csproj",
         "projectName": "u-market",
-        "projectPath": "/Users/eladyashar/Projects/u-market/u-market/u-market.csproj",
-        "packagesPath": "/Users/eladyashar/.nuget/packages/",
-        "outputPath": "/Users/eladyashar/Projects/u-market/u-market/obj/",
+        "projectPath": "C:\\Users\\Uriel\\Desktop\\U_Market\\u-market\\u-market\\u-market.csproj",
+        "packagesPath": "C:\\Users\\Uriel\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Uriel\\Desktop\\U_Market\\u-market\\u-market\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/eladyashar/.config/NuGet/NuGet.Config"
+          "C:\\Users\\Uriel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -36,7 +37,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "imports": [
             "net461",
             "net462",
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
