@@ -19,7 +19,7 @@ namespace u_market.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.NumTimes = GetAll().Select(c => c.name).ToList()[0];
+            ViewBag.NumTimes = GetAll().Select(c => c.Name).ToList()[0];
             return View();
         }
 
