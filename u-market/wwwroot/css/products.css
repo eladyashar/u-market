@@ -1,0 +1,22 @@
+﻿.cards {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    height: calc(100vh - 72px);
+}
+
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-container {
+    height: 380px;
+    width: 200px;
+    margin: 15px;
+}
+
+.image-container {
+    height: 135px;
+}
