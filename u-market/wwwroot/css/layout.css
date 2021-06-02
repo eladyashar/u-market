@@ -1,0 +1,26 @@
+﻿.main-appbar {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 72px;
+    background-color: gray;
+}
+.app-content {
+
+}
+.sidebar {
+    width: 120px;
+    left: 0;
+    bottom:0;
+    top: 72px;
+    height: calc(100vh - 72px);
+    background-color:lightgray;
+}
+.page-container {
+    display: flex;
+    flex-direction: row;
+}
+body {
+    overflow-y: hidden;
+    max-height:100%;
+}
