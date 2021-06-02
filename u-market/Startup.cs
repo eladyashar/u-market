@@ -30,7 +30,7 @@ namespace u_market
             services.AddDbContext<MarketContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("u-market")));
 
-            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(5));
+            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMilliseconds(200));
 
             // Adds authenticaion and cookie config
             services
@@ -39,6 +39,11 @@ namespace u_market
                 {
                     options.LoginPath = "/users/login";
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +63,10 @@ namespace u_market
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
