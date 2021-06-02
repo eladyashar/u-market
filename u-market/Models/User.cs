@@ -1,29 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace u_market.Models
 {
-    public enum UserType
+    public enum Role
     {
-        Client,
-        Admin
+        Admin, Client
     }
-
     public class User
     {
         [Key]
-        [Column("id")]
-        public int Id { get; set; }
-
+        [Required]
+        [StringLength(20)]
+        [RegularExpression("([a-zA-Z0-9]+)", ErrorMessage = "Enter only letters and numbers for username")]
         [Column("username")]
         public string Username { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        [RegularExpression("([a-zA-Z0-9]+)", ErrorMessage = "Enter only letters and numbers for password")]
         [Column("password")]
         public string Password { get; set; }
-        [Column("type")]
-        public UserType Type { get; set; } = UserType.Client;
+
+        [Required]
+        [DefaultValue(Role.Client)]
+        [Range(0,2)]
+        [Column("role")]
+        public Role UserRole { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        [RegularExpression("([a-zA-Z]+[a-zA-Z- ]*[a-zA-Z]+)|([a-zA-Z]){1}", ErrorMessage = "Invalid Name")]
+        [Column("first_name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        [RegularExpression("([a-zA-Z]+[a-zA-Z- ]*[a-zA-Z]+)|([a-zA-Z]){1}", ErrorMessage = "Invalid Name")]
+        [Column("last_name")]
+        public string LastName { get; set; }
     }
 }

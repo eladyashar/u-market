@@ -11,7 +11,7 @@ namespace u_market.DAL
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Store> Stores { get; set; }
-
+        public DbSet<User> Users { get; set; }
         public MarketContext(DbContextOptions<MarketContext> options) : base(options)
         {
 
@@ -21,6 +21,7 @@ namespace u_market.DAL
         {
             modelBuilder.Entity<Product>().ToTable("products");
             modelBuilder.Entity<Store>().ToTable("stores");
+            modelBuilder.Entity<Store>().ToTable("users");
         }
     }
 }
