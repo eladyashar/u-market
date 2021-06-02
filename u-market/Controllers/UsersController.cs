@@ -28,7 +28,7 @@ namespace u_market.Controllers
             // authenticated users cannot login
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Home", "Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
@@ -60,8 +60,8 @@ namespace u_market.Controllers
             var claims = new List<Claim>
             {
                 new Claim("Username", user.Username),
-                //new Claim("FirstName", user.FirstName),
-                //new Claim(ClaimTypes.Role, user.UserRole.ToString())
+                new Claim("FirstName", user.FirstName),
+                new Claim(ClaimTypes.Role, user.UserRole.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -70,7 +70,6 @@ namespace u_market.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
-
         }
 
         [HttpPost]
