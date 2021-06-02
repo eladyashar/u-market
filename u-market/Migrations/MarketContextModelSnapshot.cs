@@ -67,7 +67,7 @@ namespace u_market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("stores");
                 });
 
             modelBuilder.Entity("u_market.Models.User", b =>
@@ -101,7 +101,7 @@ namespace u_market.Migrations
 
                     b.HasKey("Username");
 
-                    b.ToTable("Users");
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("u_market.Models.Product", b =>
