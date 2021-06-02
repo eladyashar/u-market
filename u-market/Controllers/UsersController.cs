@@ -37,16 +37,13 @@ namespace u_market.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string Username, string Password)
         {
-            var users = Ctx.Users.Where(user => user.Username == Username && user.Password == Password).ToList();
-            ViewData["FailedLogin"] = false;
+            var user = Ctx.Users.SingleOrDefault(user => user.Username == Username && user.Password == Password);
 
-            if (users != null && users.Count() > 0)
+            if (user != null)
             {
-                await RegisterCookieForUser(users.First());
-                return RedirectToAction("Home", "Index");
+                await RegisterCookieForUser(user);
+                return RedirectToAction("Index", "Home");
             }
-
-            ViewData["FailedLogin"] = true;
 
             return View();
         }

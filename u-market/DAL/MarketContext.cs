@@ -21,7 +21,7 @@ namespace u_market.DAL
         {
             modelBuilder.Entity<Product>().ToTable("products");
             modelBuilder.Entity<Store>().ToTable("stores");
-            modelBuilder.Entity<Store>().ToTable("users");
+            modelBuilder.Entity<User>().ToTable("users");
         }
     }
 }

@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace u_market.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initial_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,15 +25,15 @@ namespace u_market.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    username = table.Column<string>(type: "text", nullable: true),
-                    Password = table.Column<string>(type: "text", nullable: true),
-                    Type = table.Column<int>(type: "integer", nullable: false)
+                    username = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    password = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    role = table.Column<int>(type: "integer", nullable: false),
+                    first_name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    last_name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.id);
+                    table.PrimaryKey("PK_users", x => x.username);
                 });
 
             migrationBuilder.CreateTable(

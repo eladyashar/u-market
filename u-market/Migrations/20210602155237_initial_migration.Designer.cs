@@ -10,8 +10,8 @@ using u_market.DAL;
 namespace u_market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    [Migration("20210602135239_user")]
-    partial class user
+    [Migration("20210602155237_initial_migration")]
+    partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,24 +74,34 @@ namespace u_market.Migrations
 
             modelBuilder.Entity("u_market.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text")
-                        .HasColumnName("password");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Username")
-                        .HasColumnType("text")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
                         .HasColumnName("username");
 
-                    b.HasKey("Id");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("last_name");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("password");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
+
+                    b.HasKey("Username");
 
                     b.ToTable("users");
                 });
