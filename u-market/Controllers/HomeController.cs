@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using u_market.Models;
+using u_market.DAL;
 
 namespace u_market.Controllers
 {
@@ -23,8 +24,11 @@ namespace u_market.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public ActionResult Privacy(string name, int numTimes = 1)
         {
+            ViewBag.Message = "Hello World!" + name;
+            //ViewBag.ProductNames = logic.GetAll().Select(x => x.Name);
+
             return View();
         }
 
