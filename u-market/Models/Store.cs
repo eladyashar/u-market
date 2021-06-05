@@ -16,5 +16,9 @@ namespace u_market.Models
         public string Name { get; set; }
         [Column("address")]
         public string Address { get; set; }
+        [ForeignKey("username")]
+        [Required]
+        public string OwnerId { get; set; }
+        public User Owner { get; set; }
     }
 }
