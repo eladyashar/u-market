@@ -11,6 +11,7 @@ namespace u_market.Models
     {
         [Key]
         [Column("id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
         [Column("name")]
@@ -21,9 +22,11 @@ namespace u_market.Models
         [Required]
         [Column("description")]
         public string Description { get; set; }
-        [ForeignKey("store_id")]
-        public Store Store { get; set; }
         [Column("image_url")]
         public string ImageUrl { get; set; }
+        [ForeignKey("StoreId")]
+        public Store Store { get; set; }
+        [Column("store_id")]
+        public int StoreId { get; set; }
     }
 }

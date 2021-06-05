@@ -22,5 +22,6 @@ namespace u_market.Models
         [Required]
         public string OwnerId { get; set; }
         public User Owner { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }
