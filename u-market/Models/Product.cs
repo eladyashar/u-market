@@ -25,7 +25,5 @@ namespace u_market.Models
         public Store Store { get; set; }
         [Column("image_url")]
         public string ImageUrl { get; set; }
-        [Column("video_url")]
-        public string VideoUrl { get; set; }
     }
 }
