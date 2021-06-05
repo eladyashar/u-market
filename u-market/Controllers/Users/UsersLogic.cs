@@ -19,6 +19,17 @@ namespace u_market.Controllers.Users
             return Ctx.Users.ToList();
         }
 
+        public User FindUser(string username, string password)
+        {
+            return Ctx.Users.SingleOrDefault(user => user.Username == username && user.Password == password);
+        }
+
+        public bool IsUsernameAvailable(string username)
+        {
+            bool isUsernameAvailable = Ctx.Users.SingleOrDefault(user => user.Username == username) == null;
+            return isUsernameAvailable;
+        }
+
         public void AddUser(User user)
         {
             Ctx.Users.Add(user);

@@ -40,7 +40,7 @@ namespace u_market.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string Username, string Password)
         {
-            var user = Ctx.Users.SingleOrDefault(user => user.Username == Username && user.Password == Password);
+            var user = UsersManagementLogic.FindUser(Username, Password);
 
             if (user != null)
             {
@@ -76,22 +76,16 @@ namespace u_market.Controllers
                 authProperties);
         }
 
-        private bool IsUsernameAvailable(string username)
-        {
-            bool isUsernameAvailable = Ctx.Users.SingleOrDefault(user => user.Username == username) == null;
-            return isUsernameAvailable;
-        }
-
         [AllowAnonymous]
         public IActionResult OnPostUserChecking(string Username)
         {
-            return Json(IsUsernameAvailable(Username));
+            return Json(UsersManagementLogic.IsUsernameAvailable(Username));
         }
 
         [AllowAnonymous]
         public IActionResult RegisterUser(User newUser)
         {
-            if (IsUsernameAvailable(newUser.Username))
+            if (UsersManagementLogic.IsUsernameAvailable(newUser.Username))
             {
                 Ctx.Add(newUser);
                 newUser.UserRole = Role.Client;
