@@ -4,8 +4,22 @@
 }
 
 <link rel="stylesheet" href="~/css/products.css" />
+<script>
+    const finishPurchase = function (name) {
+        var formData = {
+            "Username": $("#name").val(),
+            "ProductId": @ViewBag.StoreDetails.Id,
+        }
+        alert(sad);
+        //$.post("/Store/AddProduct", formData)
+        //    .done(function () {
+        //        alert("good");
+        // });
 
-<div></div>
+        var purchaseText = "You got yourself a new " + name + "!";
+        $('.modal-body').html(purchaseText);
+    };
+</script>
 
 <div class="cards">
     @foreach (var product in @ViewBag.Products)
@@ -24,10 +38,29 @@
                 </ul>
                 <div class="card-body card-bottom">
                     <i class="btn far fa-thumbs-up"></i>
-                    <button type="button" class="btn btn-primary btn-sm">Buy me!</button>
+                    <button onclick="finishPurchase('@product.Name')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#purchaseModal">Buy me!</button>
+
+                    <div class="modal fade" id="purchaseModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Your order is complete!</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     }
 
 </div>
+
