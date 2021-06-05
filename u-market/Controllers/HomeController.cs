@@ -30,7 +30,7 @@ namespace u_market.Controllers
 
         private List<Product> GetAll()
         {
-            return Ctx.Products.Include(p => p.Store).ThenInclude(s => s.Owner).ToList();
+            return Ctx.Products.Include(p => p.Store).ToList();
         }
 
         public ActionResult Privacy(string name, int numTimes = 1)

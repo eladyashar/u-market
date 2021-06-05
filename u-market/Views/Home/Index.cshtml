@@ -14,17 +14,18 @@
     {
         <div class="card-container">
             <div class="card">
-                <img src="@product.ImageUrl" class="card-img-top image-container" alt="">
+                <img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
+                     class="card-img-top image-container" alt="">
                 <div class="card-body">
                     <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">@product.Description</p>
+                    <p class="card-text product-desc">@product.Description</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">*Name owner*s shop</li>
+                    <li class="list-group-item">@product.Store.Name shop</li>
                     <li class="list-group-item">@product.Price$</li>
                 </ul>
                 <div class="card-body card-bottom">
-                    <i class="far fa-thumbs-up"></i>
+                    <i class="btn far fa-thumbs-up"></i>
                     <button type="button" class="btn btn-primary btn-sm">Buy me!</button>
                 </div>
             </div>
