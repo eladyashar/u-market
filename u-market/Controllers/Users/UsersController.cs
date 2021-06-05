@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace u_market.Controllers
 {
+    [Authorize(Roles = "Admin,Client")]
     public class UsersController : Controller
     {
         private readonly MarketContext Ctx;
@@ -22,6 +24,7 @@ namespace u_market.Controllers
             UsersManagementLogic = new UsersManagementLogic(Ctx);
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             // authenticated users cannot login
@@ -33,6 +36,7 @@ namespace u_market.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(string Username, string Password)
         {
@@ -71,14 +75,29 @@ namespace u_market.Controllers
                 authProperties);
         }
 
-        [HttpPost]
-        public ActionResult IsUsernameAvailable(string username)
+        private bool IsUsernameAvailable(string username)
         {
-            bool isUsernameAvailable = Ctx.Users.SingleOrDefault(user => user.Username == username) != null;
-
-            return Json(new { isUsernameAvailable });
+            bool isUsernameAvailable = Ctx.Users.SingleOrDefault(user => user.Username == username) == null;
+            return isUsernameAvailable;
         }
 
+        [AllowAnonymous]
+        public IActionResult RegisterUser(User newUser)
+        {
+            if (IsUsernameAvailable(newUser.Username))
+            {
+                Ctx.Add(newUser);
+                Ctx.SaveChanges();
+
+                return RedirectToAction(nameof(Login));
+            }
+
+            ViewBag.Error = "User name is an available";
+            return Json(false);
+        }
+
+
+        [AllowAnonymous]
         public IActionResult Register()
         {
             // authenticated users cannot register
