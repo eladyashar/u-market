@@ -17,17 +17,28 @@ namespace u_market.Controllers.Users
 
         public IActionResult Index()
         {
-            ViewBag.Users = Logic.GetAll();
             return View();
+        }
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            return Ok(Logic.GetAll());
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] User user)
+        {
+            Logic.Update(user);
+            return Ok();
         }
 
         [HttpDelete]
-        public void Delete([FromBody] string username)
+        public IActionResult Delete([FromBody] string username)
         {
             var user = Logic.FindUser(username);
             Logic.RemoveUser(user);
-            ViewBag.Users = Logic.GetAll();
+            return Ok();
         }
     }
 }

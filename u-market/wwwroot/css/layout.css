@@ -40,3 +40,7 @@ body {
     padding: 20px;
     color: white;
 }
+
+.page-body {
+    width: 100%;
+}
