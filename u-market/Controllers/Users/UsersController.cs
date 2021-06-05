@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using u_market.DAL;
 using u_market.Models;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +14,12 @@ namespace u_market.Controllers
     public class UsersController : Controller
     {
         private readonly MarketContext Ctx;
+        private readonly UsersManagementLogic UsersManagementLogic;
 
         public UsersController(MarketContext context)
         {
             Ctx = context;
+            UsersManagementLogic = new UsersManagementLogic(Ctx);
         }
 
         public IActionResult Login()
@@ -88,6 +87,12 @@ namespace u_market.Controllers
                 return RedirectToAction("Home", "Genres");
             }
 
+            return View();
+        }
+
+        public IActionResult UsersManagement()
+        {
+            List<User> allUsers = UsersManagementLogic.GetAll().ToList();
             return View();
         }
     }
