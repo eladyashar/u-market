@@ -1,42 +1,61 @@
-﻿<!-- Button trigger modal -->
+﻿@model u_market.Models.Store
+<!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Launch static backdrop modal
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add new product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="productName" class="form-label">product name</label>
-                    <input type="text" class="form-control" id="productName" placeholder="basketball">
+<form>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add new product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mb-3">
-                    <label for="productPrice" class="form-label">price</label>
-                    <input type="text" class="form-control" id="productPrice" placeholder="3$">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">product name</label>
+                        <input type="text" class="form-control" id="name" placeholder="basketball">
+                    </div>
+                    <div class="mb-3">
+                        <label for="store" class="form-label">store name</label>
+                        <input value="@ViewBag.StoreDetails.Name" disabled type="text" class="form-control" id="store">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">price</label>
+                        <input type="text" class="form-control" id="price" placeholder="3$">
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">image link</label>
+                        <input type="text" class="form-control" id="image" placeholder="image">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">description</label>
+                        <textarea class="form-control" id="description" rows="3"></textarea>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="productImage" class="form-label">image link</label>
-                    <input type="text" class="form-control" id="productImage" placeholder="image">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                    <button id ="submit" onclick="saveProduct()" type="button" class="btn btn-primary">Add!</button>
                 </div>
-                <div class="mb-3">
-                    <label for="productVideo" class="form-label">video link</label>
-                    <input type="text" class="form-control" id="productVideo" placeholder="video">
-                </div>
-                <div class="mb-3">
-                    <label for="productDesc" class="form-label">description</label>
-                    <textarea class="form-control" id="productDesc" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
-                <button type="button" class="btn btn-primary">Add!</button>
             </div>
         </div>
     </div>
-</div>
+</form>
+<script>
+    function saveProduct() {
+        var formData = {
+            "Name": $("#name").val(),
+            "StoreId": @ViewBag.StoreDetails.Id,
+            "Price": $("#price").val(),
+            "ImageUrl": $("#image").val(),
+            "Description": $("#description").val(),
+            "Id":7
+        }
+        $.post("/Store/AddProduct", formData)
+            .done(function () {
+                alert("good");
+         });
+    }
+</script>

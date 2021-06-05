@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
 using u_market.Models;
@@ -13,9 +11,11 @@ namespace u_market.Controllers
     public class StoreController : Controller
     {
         private readonly MarketContext Ctx;
+        private readonly ProductLogic productLogic;
 
         public StoreController(MarketContext Ctx)
         {
+            this.productLogic = new ProductLogic(Ctx);
             this.Ctx = Ctx;
         }
 
@@ -28,10 +28,17 @@ namespace u_market.Controllers
             return View();
         }
 
+        public ActionResult AddProduct([Bind("Id,Name,StoreId,Price,ImageUrl,Description")] Product product)
+        {
+            productLogic.AddProduct(product);
+            return View("~/Views/Store/index.cshtml");
+        }
+
         private IList<Store> GetAll()
         {
-            return Ctx.Stores.Include(c => c.Products)
-                .Include(c=> c.Owner).ToList();
+            var stores = Ctx.Stores.Include(c => c.Products)
+                .Include(c => c.Owner);
+            return stores.ToList();
         }
     }
 }
