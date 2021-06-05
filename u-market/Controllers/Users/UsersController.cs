@@ -82,18 +82,25 @@ namespace u_market.Controllers
         }
 
         [AllowAnonymous]
+        public IActionResult OnPostUserChecking(string Username)
+        {
+            return Json(IsUsernameAvailable(Username));
+        }
+
+        [AllowAnonymous]
         public IActionResult RegisterUser(User newUser)
         {
             if (IsUsernameAvailable(newUser.Username))
             {
                 Ctx.Add(newUser);
+                newUser.UserRole = Role.Client;
                 Ctx.SaveChanges();
 
                 return RedirectToAction(nameof(Login));
             }
 
             ViewBag.Error = "User name is an available";
-            return Json(false);
+            return RedirectToAction(nameof(Register));
         }
 
 
