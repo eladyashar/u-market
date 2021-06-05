@@ -3,9 +3,11 @@
     Layout = "_Layout";
 }
 
-<h1>Users Management Page</h1>
-<hr />
-<div class="row">
+<head>
+    <link rel="stylesheet" href="~/css/user-management.css" />
+</head>
+
+<div class="user-management-container">
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -13,16 +15,24 @@
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Role</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var user in ViewBag.Users)
             {
                 <tr>
-                    <th scope="row">@user.Username</th>
+                    <td>@user.Username</td>
                     <td>@user.FirstName</td>
                     <td>@user.LastName</td>
                     <td>@user.UserRole</td>
+                    <td>
+                        <i onclick="" class="fas fa-pen"></i>
+                    </td>
+                    <td>
+                        <i onclick="removeUser('@user.Username')" class="fas fa-trash"></i>
+                    </td>
                 </tr>
             }
         </tbody>

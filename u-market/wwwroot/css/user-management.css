@@ -1,0 +1,15 @@
+﻿.user-management-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.fa-pen, .fa-trash {
+    cursor: pointer;
+}
+
+.fa-pen:hover, .fa-trash:hover {
+    color: gray;
+    transform: rotate(360deg);
+    transition: transform 2s;
+}

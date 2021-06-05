@@ -19,6 +19,11 @@ namespace u_market.Controllers.Users
             return Ctx.Users.ToList();
         }
 
+        public User FindUser(string username)
+        {
+            return Ctx.Users.SingleOrDefault(user => user.Username == username);
+        }
+
         public User FindUser(string username, string password)
         {
             return Ctx.Users.SingleOrDefault(user => user.Username == username && user.Password == password);
@@ -26,13 +31,13 @@ namespace u_market.Controllers.Users
 
         public bool IsUsernameAvailable(string username)
         {
-            bool isUsernameAvailable = Ctx.Users.SingleOrDefault(user => user.Username == username) == null;
-            return isUsernameAvailable;
+            return FindUser(username) == null;
         }
 
         public void AddUser(User user)
         {
             Ctx.Users.Add(user);
+            Ctx.SaveChanges();
         }
     }
 }
