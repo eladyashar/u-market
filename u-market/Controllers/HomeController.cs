@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace u_market.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Client")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

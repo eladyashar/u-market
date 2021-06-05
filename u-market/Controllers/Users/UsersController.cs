@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace u_market.Controllers
 {
+    [Authorize(Roles = "Admin,Client")]
     public class UsersController : Controller
     {
         private readonly MarketContext Ctx;
@@ -22,6 +24,7 @@ namespace u_market.Controllers
             UsersManagementLogic = new UsersManagementLogic(Ctx);
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             // authenticated users cannot login
@@ -33,10 +36,11 @@ namespace u_market.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(string Username, string Password)
         {
-            var user = Ctx.Users.SingleOrDefault(user => user.Username == Username && user.Password == Password);
+            var user = UsersManagementLogic.FindUser(Username, Password);
 
             if (user != null)
             {
@@ -44,6 +48,7 @@ namespace u_market.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            ViewBag.Error = "Username or Password are incorrect";
             return View();
         }
 
@@ -71,14 +76,30 @@ namespace u_market.Controllers
                 authProperties);
         }
 
-        [HttpPost]
-        public ActionResult IsUsernameAvailable(string username)
+        [AllowAnonymous]
+        public IActionResult OnPostUserChecking(string Username)
         {
-            bool isUsernameAvailable = Ctx.Users.SingleOrDefault(user => user.Username == username) != null;
-
-            return Json(new { isUsernameAvailable });
+            return Json(UsersManagementLogic.IsUsernameAvailable(Username));
         }
 
+        [AllowAnonymous]
+        public IActionResult RegisterUser(User newUser)
+        {
+            if (UsersManagementLogic.IsUsernameAvailable(newUser.Username))
+            {
+                Ctx.Add(newUser);
+                newUser.UserRole = Role.Client;
+                Ctx.SaveChanges();
+
+                return RedirectToAction(nameof(Login));
+            }
+
+            ViewBag.Error = "User name is an available";
+            return RedirectToAction(nameof(Register));
+        }
+
+
+        [AllowAnonymous]
         public IActionResult Register()
         {
             // authenticated users cannot register
