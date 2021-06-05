@@ -14,8 +14,10 @@ namespace u_market.Models
         public int Id { get; set; }
         [Column("name")]
         public string Name { get; set; }
-        [Column("address")]
-        public string Address { get; set; }
+        [Column("lat")]
+        public double Lat { get; set; }
+        [Column("lang")]
+        public double Lang { get; set; }
         [ForeignKey("username")]
         [Required]
         public string OwnerId { get; set; }
