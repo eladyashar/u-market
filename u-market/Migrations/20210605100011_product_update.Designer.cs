@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using u_market.DAL;
@@ -9,9 +10,10 @@ using u_market.DAL;
 namespace u_market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    partial class MarketContextModelSnapshot : ModelSnapshot
+    [Migration("20210605100011_product_update")]
+    partial class product_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,13 +77,7 @@ namespace u_market.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("character varying(20)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("stores");
                 });
@@ -127,17 +123,6 @@ namespace u_market.Migrations
                         .HasForeignKey("store_id");
 
                     b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("u_market.Models.Store", b =>
-                {
-                    b.HasOne("u_market.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 #pragma warning restore 612, 618
         }

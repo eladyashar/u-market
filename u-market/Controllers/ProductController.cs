@@ -17,7 +17,7 @@ namespace u_market.Controllers
             this.Ctx = Ctx;
         }
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             ViewBag.NumTimes = GetAll().Select(c => c.Name).ToList()[0];
             return View();

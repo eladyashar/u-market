@@ -9,6 +9,7 @@
 .card-bottom {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .card-container {
@@ -19,4 +20,8 @@
 
 .image-container {
     height: 135px;
+}
+
+.product-desc {
+    height: 72px;
 }
