@@ -48,6 +48,7 @@ namespace u_market.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            ViewBag.Error = "Username or Password are incorrect";
             return View();
         }
 
