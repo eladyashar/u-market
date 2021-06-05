@@ -16,6 +16,7 @@
             <div class="logo">
                 u_market
             </div>
+            <p>Hello, @User.Claims.Where(c => c.Type.Equals("FirstName")).Select(c => c.Value).Single()</p>
             <div>
                 <a title="logout" data-bs-toggle="tooltip" asp-controller="UsersManagement" asp-action="Index">
                     <i class="fas fa-user sidebar-item"></i>
