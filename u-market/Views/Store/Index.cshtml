@@ -1,48 +1,103 @@
 ﻿@model u_market.Models.Store
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Launch static backdrop modal
-</button>
-
-<!-- Modal -->
-<form>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add new product</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<link rel="stylesheet" href="~/css/products.css" />
+<link rel="stylesheet" href="~/css/store.css" />
+<div class="header">
+    <h1>store managment</h1>
+    <h2>@ViewBag.StoreDetails.Name</h2>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProduct">
+        Add Product
+    </button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editStore">
+        edit store
+    </button>
+</div>
+<div class="cards">
+    @foreach (var product in @ViewBag.StoreDetails.Products)
+    {
+        <div class="card-container">
+            <div class="card">
+                <img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
+                     class="card-img-top image-container" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text product-desc">@product.Description</p>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">product name</label>
-                        <input type="text" class="form-control" id="name" placeholder="basketball">
-                    </div>
-                    <div class="mb-3">
-                        <label for="store" class="form-label">store name</label>
-                        <input value="@ViewBag.StoreDetails.Name" disabled type="text" class="form-control" id="store">
-                    </div>
-                    <div class="mb-3">
-                        <label for="price" class="form-label">price</label>
-                        <input type="text" class="form-control" id="price" placeholder="3$">
-                    </div>
-                    <div class="mb-3">
-                        <label for="image" class="form-label">image link</label>
-                        <input type="text" class="form-control" id="image" placeholder="image">
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">description</label>
-                        <textarea class="form-control" id="description" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
-                    <button id ="submit" onclick="saveProduct()" type="button" class="btn btn-primary">Add!</button>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">@product.Store.Name shop</li>
+                    <li class="list-group-item">@product.Price$</li>
+                </ul>
+                <div class="card-body card-bottom">
+                    <i class="btn far fa-thumbs-up"></i>
+                    <button type="button" class="btn btn-primary btn-sm">Buy me!</button>
                 </div>
             </div>
         </div>
+    }
+
+</div>
+
+<!-- Modal product-->
+<div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductLabel">Add new product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="name" class="form-label">product name</label>
+                    <input type="text" class="form-control" id="name" placeholder="basketball">
+                </div>
+                <div class="mb-3">
+                    <label for="store" class="form-label">store name</label>
+                    <input value="@ViewBag.StoreDetails.Name" disabled type="text" class="form-control" id="store">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">price</label>
+                    <input type="text" class="form-control" id="price" placeholder="3$">
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">image link</label>
+                    <input type="text" class="form-control" id="image" placeholder="image">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">description</label>
+                    <textarea class="form-control" id="description" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                <button id="submit" onclick="saveProduct()" type="button" class="btn btn-primary">Add!</button>
+            </div>
+        </div>
     </div>
-</form>
+</div>
+
+<!-- Modal edit store-->
+<div class="modal fade" id="editStore" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editStoreLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editStoreLabel">Edit store</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="name" class="form-label">store name</label>
+                    <input type="text" class="form-control" id="name" placeholder="basketball">
+                </div>
+                <div id="map"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                <button id="submit" onclick="updateStore()" type="button" class="btn btn-primary">save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH3CKQPJVqp2uyqXF9t0zQlPorVNaMhHU&callback=initMap"></script>
 <script>
     function saveProduct() {
         var formData = {
@@ -51,11 +106,23 @@
             "Price": $("#price").val(),
             "ImageUrl": $("#image").val(),
             "Description": $("#description").val(),
-            "Id":7
         }
-        $.post("/Store/AddProduct", formData)
-            .done(function () {
+        $.post("/Store/AddProduct", formData, (data, status, xhr) => {
+            if (status == "success") {
                 alert("good");
-         });
+                window.location.href = "/Store/Index";
+            } else {
+                alert("error ocured while trying to save the product");
+            }
+        });
+    }
+
+    let map;
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 8,
+        });
     }
 </script>

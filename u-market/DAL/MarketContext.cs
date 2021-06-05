@@ -19,7 +19,7 @@ namespace u_market.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>().ToTable("products");
+            modelBuilder.Entity<Product>().ToTable("products").Property(p => p.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Store>().ToTable("stores");
             modelBuilder.Entity<User>().ToTable("users");
         }

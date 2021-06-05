@@ -28,10 +28,17 @@ namespace u_market.Controllers
             return View();
         }
 
-        public ActionResult AddProduct([Bind("Id,Name,StoreId,Price,ImageUrl,Description")] Product product)
+        public IActionResult AddProduct([Bind("Name,StoreId,Price,ImageUrl,Description")] Product product)
         {
-            productLogic.AddProduct(product);
-            return View("~/Views/Store/index.cshtml");
+            try
+            {
+                productLogic.AddProduct(product);
+                return StatusCode(200);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
 
         private IList<Store> GetAll()
