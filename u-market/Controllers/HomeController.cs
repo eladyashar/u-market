@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using u_market.Models;
 using u_market.DAL;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace u_market.Controllers
 {
@@ -15,15 +16,21 @@ namespace u_market.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly MarketContext Ctx;
+        public HomeController(MarketContext Ctx)
         {
-            _logger = logger;
+            this.Ctx = Ctx;
         }
 
         public IActionResult Index()
         {
+            ViewBag.Products = GetAll();
             return View();
+        }
+
+        private List<Product> GetAll()
+        {
+            return Ctx.Products.Include(p => p.Store).ThenInclude(s => s.Owner).ToList();
         }
 
         public ActionResult Privacy(string name, int numTimes = 1)
