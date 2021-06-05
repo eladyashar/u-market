@@ -14,11 +14,13 @@ namespace u_market.Controllers
         public void RemoveUser(User user)
         {
             Ctx.Users.Remove(user);
+            Ctx.SaveChanges();
         }
 
         public void Update(User user)
         {
             Ctx.Users.Update(user);
+            Ctx.SaveChanges();
         }
     }
 }

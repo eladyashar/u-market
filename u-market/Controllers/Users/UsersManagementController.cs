@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
+using u_market.Models;
 
 namespace u_market.Controllers.Users
 {
@@ -19,6 +20,14 @@ namespace u_market.Controllers.Users
             ViewBag.Users = Logic.GetAll();
             return View();
 
+        }
+
+        [HttpDelete]
+        public void Delete([FromBody] string username)
+        {
+            var user = Logic.FindUser(username);
+            Logic.RemoveUser(user);
+            ViewBag.Users = Logic.GetAll();
         }
     }
 }

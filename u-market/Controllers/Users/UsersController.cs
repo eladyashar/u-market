@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using u_market.Controllers.Users;
 
 namespace u_market.Controllers
 {
@@ -16,12 +17,12 @@ namespace u_market.Controllers
     public class UsersController : Controller
     {
         private readonly MarketContext Ctx;
-        private readonly UsersManagementLogic UsersManagementLogic;
+        private UsersLogic Logic;
 
         public UsersController(MarketContext context)
         {
             Ctx = context;
-            UsersManagementLogic = new UsersManagementLogic(Ctx);
+            Logic = new UsersLogic(context);
         }
 
         [AllowAnonymous]
@@ -40,7 +41,7 @@ namespace u_market.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string Username, string Password)
         {
-            var user = UsersManagementLogic.FindUser(Username, Password);
+            var user = Logic.FindUser(Username, Password);
 
             if (user != null)
             {
@@ -79,13 +80,13 @@ namespace u_market.Controllers
         [AllowAnonymous]
         public IActionResult OnPostUserChecking(string Username)
         {
-            return Json(UsersManagementLogic.IsUsernameAvailable(Username));
+            return Json(Logic.IsUsernameAvailable(Username));
         }
 
         [AllowAnonymous]
         public IActionResult RegisterUser(User newUser)
         {
-            if (UsersManagementLogic.IsUsernameAvailable(newUser.Username))
+            if (Logic.IsUsernameAvailable(newUser.Username))
             {
                 Ctx.Add(newUser);
                 newUser.UserRole = Role.Client;
@@ -108,12 +109,6 @@ namespace u_market.Controllers
                 return RedirectToAction("Home", "Genres");
             }
 
-            return View();
-        }
-
-        public IActionResult UsersManagement()
-        {
-            List<User> allUsers = UsersManagementLogic.GetAll().ToList();
             return View();
         }
     }
