@@ -12,6 +12,8 @@ namespace u_market.DAL
         public DbSet<Product> Products { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
+
         public MarketContext(DbContextOptions<MarketContext> options) : base(options)
         {
 
@@ -22,6 +24,7 @@ namespace u_market.DAL
             modelBuilder.Entity<Product>().ToTable("products").Property(p => p.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Store>().ToTable("stores");
             modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Purchase>().ToTable("purchases").HasKey(c => new { c.Username, c.ProductId, c.PurchaseDate });
         }
     }
-}
+}   

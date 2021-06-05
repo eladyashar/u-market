@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using u_market.DAL;
@@ -9,9 +10,10 @@ using u_market.DAL;
 namespace u_market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    partial class MarketContextModelSnapshot : ModelSnapshot
+    [Migration("20210605150142_purchase")]
+    partial class purchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,13 +47,12 @@ namespace u_market.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("price");
 
-                    b.Property<int>("StoreId")
-                        .HasColumnType("integer")
-                        .HasColumnName("store_id");
+                    b.Property<int?>("store_id")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StoreId");
+                    b.HasIndex("store_id");
 
                     b.ToTable("products");
                 });
@@ -59,18 +60,16 @@ namespace u_market.Migrations
             modelBuilder.Entity("u_market.Models.Purchase", b =>
                 {
                     b.Property<string>("Username")
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("username");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("integer")
-                        .HasColumnName("product_id");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("time_stamp");
 
-                    b.HasKey("Username", "ProductId", "PurchaseDate");
+                    b.HasKey("Username", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -85,13 +84,9 @@ namespace u_market.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<double>("Lang")
-                        .HasColumnType("double precision")
-                        .HasColumnName("lang");
-
-                    b.Property<double>("Lat")
-                        .HasColumnType("double precision")
-                        .HasColumnName("lat");
+                    b.Property<string>("Address")
+                        .HasColumnType("text")
+                        .HasColumnName("address");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -145,10 +140,8 @@ namespace u_market.Migrations
             modelBuilder.Entity("u_market.Models.Product", b =>
                 {
                     b.HasOne("u_market.Models.Store", "Store")
-                        .WithMany("Products")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("store_id");
 
                     b.Navigation("Store");
                 });
@@ -181,11 +174,6 @@ namespace u_market.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("u_market.Models.Store", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
