@@ -23,9 +23,8 @@ namespace u_market.DAL
         {
             modelBuilder.Entity<Product>().ToTable("products").Property(p => p.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Store>().ToTable("stores");
-            modelBuilder.Entity<Purchase>().ToTable("purchases");
             modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<Purchase>().HasKey(c => new { c.Username, c.ProductId });
+            modelBuilder.Entity<Purchase>().ToTable("purchases").HasKey(c => new { c.Username, c.ProductId, c.PurchaseDate });
         }
     }
-}
+}   

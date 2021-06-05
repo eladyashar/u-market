@@ -5,16 +5,16 @@
 
 <link rel="stylesheet" href="~/css/products.css" />
 <script>
-    const finishPurchase = function (name) {
-        var formData = {
-            "Username": $("#name").val(),
-            "ProductId": @ViewBag.StoreDetails.Id,
+    const finishPurchase = function (name, id) {
+        var Purchase = {
+            "Username": '@ViewBag.Username',
+            "ProductId": id
         }
-        alert(sad);
-        //$.post("/Store/AddProduct", formData)
-        //    .done(function () {
-        //        alert("good");
-        // });
+        $.post("/Product/AddPurchase", Purchase, (data, status) => {
+            if (status != "success") {
+                alert("error ocured while trying to save the product");
+            }
+        });
 
         var purchaseText = "You got yourself a new " + name + "!";
         $('.modal-body').html(purchaseText);
@@ -38,7 +38,7 @@
                 </ul>
                 <div class="card-body card-bottom">
                     <i class="btn far fa-thumbs-up"></i>
-                    <button onclick="finishPurchase('@product.Name')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#purchaseModal">Buy me!</button>
+                    <button onclick="finishPurchase('@product.Name', '@product.Id')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#purchaseModal">Buy me!</button>
 
                     <div class="modal fade" id="purchaseModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">

@@ -9,16 +9,15 @@ namespace u_market.Models
 {
     public class Purchase
     {
-        [Key, Column(Order = 0)]
-        [ForeignKey("username")]
+        [Key, Column("username",Order = 0)]
         public string Username { get; set; }
-        [ForeignKey("product_id")]
-        [Key, Column(Order = 1)]
-        public int ProductId { get; set; }
-
-        public virtual Product Product { get; set; }
+        [ForeignKey("Username")]
         public virtual User User { get; set; }
-        [Column("time_stamp")]
+        [Key, Column("product_id",Order = 1)]
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
+        [Key, Column("time_stamp", Order = 2)]
         public DateTime PurchaseDate { get; set; }
 
         public Purchase() {

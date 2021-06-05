@@ -17,6 +17,21 @@ namespace u_market.Controllers
             this.Ctx = Ctx;
         }
 
+        public IActionResult AddPurchase([Bind("Username,ProductId,PurchaseDate")] Purchase purchase)
+        {
+            try
+            {
+                Ctx.Purchases.Add(purchase);
+                Ctx.SaveChanges();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+
+            return StatusCode(200);
+        }
+
         public IActionResult Index()
         {
             ViewBag.NumTimes = GetAll().Select(c => c.Name).ToList()[0];
@@ -35,5 +50,6 @@ namespace u_market.Controllers
 
             return View();
         }
+
     }
 }

@@ -9,6 +9,7 @@ using u_market.Models;
 using u_market.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace u_market.Controllers
 {
@@ -25,6 +26,9 @@ namespace u_market.Controllers
         public IActionResult Index()
         {
             ViewBag.Products = GetAll();
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            ViewBag.Username = claims.ToArray()[0].ToString().Split(' ')[1];
             return View();
         }
 
