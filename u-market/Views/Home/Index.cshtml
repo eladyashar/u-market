@@ -19,6 +19,15 @@
         var purchaseText = "You got yourself a new " + name + "!";
         $('.modal-body').html(purchaseText);
     };
+
+    const openShareDialog = productName => {
+        FB.ui({
+            method: 'share',
+            href: 'https://developers.facebook.com/docs/',
+            hashtag: '#u_market',
+            quote: `I am loving the product "${productName}" from u_market!!! <3`
+        });
+    }
 </script>
 
 <div class="cards">
@@ -37,7 +46,7 @@
                     <li class="list-group-item">@product.Price$</li>
                 </ul>
                 <div class="card-body card-bottom">
-                    <i class="btn far fa-thumbs-up"></i>
+                    <i class="btn far fa-thumbs-up" onclick="openShareDialog('@product.Name')"></i>
                     <button onclick="finishPurchase('@product.Name', '@product.Id')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#purchaseModal">Buy me!</button>
 
                     <div class="modal fade" id="purchaseModal" tabindex="-1" aria-hidden="true">
@@ -61,6 +70,4 @@
             </div>
         </div>
     }
-
 </div>
-
