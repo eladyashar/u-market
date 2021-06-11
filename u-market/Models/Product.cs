@@ -28,5 +28,7 @@ namespace u_market.Models
         public Store Store { get; set; }
         [Column("store_id")]
         public int StoreId { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }
