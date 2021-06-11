@@ -23,9 +23,22 @@ namespace u_market.Controllers
         {
             Store myStore = GetAll().Where(s => s.OwnerId == "ramig")
                     .FirstOrDefault<Store>();
-            //string jsonString = JsonSerializer.Serialize(myStore);
             ViewBag.StoreDetails = myStore;
             return View();
+        }
+
+        public IActionResult UpdateStore([Bind("Id,Name,Lat,Lang,OwnerId")] Store store)
+        {
+            try
+            {
+                Ctx.Stores.Update(store);
+                Ctx.SaveChanges();
+                return StatusCode(200);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
 
         public IActionResult AddProduct([Bind("Name,StoreId,Price,ImageUrl,Description")] Product product)
@@ -33,6 +46,32 @@ namespace u_market.Controllers
             try
             {
                 productLogic.AddProduct(product);
+                return StatusCode(200);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        public IActionResult UpdateProduct([Bind("Id,Name,StoreId,Price,ImageUrl,Description")] Product product)
+        {
+            try
+            {
+                productLogic.UpdateProduct(product);
+                return StatusCode(200);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        public IActionResult RemoveProduct([Bind("productId")] int productId)
+        {
+            try
+            {
+                productLogic.RemoveProduct(productId);
                 return StatusCode(200);
             }
             catch
