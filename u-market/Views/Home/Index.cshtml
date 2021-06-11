@@ -4,6 +4,8 @@
 }
 
 <link rel="stylesheet" href="~/css/products.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/product.js"></script>
 <script>
     const finishPurchase = function (name, id) {
         var Purchase = {
@@ -29,45 +31,71 @@
         });
     }
 </script>
+<section class="input-group">
+    <label>Filter By:</label>
+    <select class="form-control store" name="store">
+        <option value="" disabled selected>Select a store</option>
+        @foreach (var store in ViewBag.Stores)
+        {
+            <option name=@store.Name value=@store.Id>@store.Name</option>
+        }
+    </select>
+    <select class="form-control price" name="price">
+        <option value="" disabled selected>Select a price</option>
+        @foreach (var price in ViewBag.Prices)
+        {
+            <option value=@price>@price</option>
+        }
+    </select>
+    <button class="btn btn-danger" onclick="clear()">
+        clear all
+    </button>
+</section>
+<section>
+    <h3>Products:</h3>
+    <div class="cards">
+        @if (ViewBag.Products.Count == 0)
+        {
+            <h3>No products found, try to filter by different proporties</h3>
+        }
+        @foreach (var product in @ViewBag.Products)
+        {
+            <div class="card-container">
+                <div class="card">
+                    <img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
+                         class="card-img-top image-container" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text product-desc">@product.Description</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">@product.Store.Name shop</li>
+                        <li class="list-group-item">@product.Price$</li>
+                    </ul>
+                    <div class="card-body card-bottom">
+                        <i class="btn far fa-thumbs-up" onclick="openShareDialog('@product.Name')"></i>
+                        <button onclick="finishPurchase('@product.Name', '@product.Id')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#purchaseModal">Buy me!</button>
 
-<div class="cards">
-    @foreach (var product in @ViewBag.Products)
-    {
-        <div class="card-container">
-            <div class="card">
-                <img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
-                     class="card-img-top image-container" alt="">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text product-desc">@product.Description</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">@product.Store.Name shop</li>
-                    <li class="list-group-item">@product.Price$</li>
-                </ul>
-                <div class="card-body card-bottom">
-                    <i class="btn far fa-thumbs-up" onclick="openShareDialog('@product.Name')"></i>
-                    <button onclick="finishPurchase('@product.Name', '@product.Id')" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#purchaseModal">Buy me!</button>
+                        <div class="modal fade" id="purchaseModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Your order is complete!</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
 
-                    <div class="modal fade" id="purchaseModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Your order is complete!</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+</section>

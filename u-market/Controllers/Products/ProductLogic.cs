@@ -17,5 +17,22 @@ namespace u_market.Controllers
             Ctx.Products.Add(product);
             Ctx.SaveChanges();
         }
+
+        public void RemoveProduct(int productId)
+        {
+            Ctx.Products.Remove(FindProduct(productId));
+            Ctx.SaveChanges();
+        }
+
+        public void UpdateProduct(Product product)
+        {
+            Ctx.Products.Update(product);
+            Ctx.SaveChanges();
+        }
+
+        public Product FindProduct(int productId)
+        {
+            return Ctx.Products.Find(productId);
+        }
     }
 }
