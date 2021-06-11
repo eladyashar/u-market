@@ -25,6 +25,7 @@ namespace u_market.DAL
             modelBuilder.Entity<Store>().ToTable("stores");
             modelBuilder.Entity<User>().ToTable("users");
             modelBuilder.Entity<Purchase>().ToTable("purchases").HasKey(c => new { c.Username, c.ProductId, c.PurchaseDate });
+            modelBuilder.Entity<Tag>().ToTable("tags").HasMany<Product>(t => t.Products).WithMany(p => p.Tags).UsingEntity(pt => pt.ToTable("product_tags"));
         }
     }
 }   
