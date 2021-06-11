@@ -106,7 +106,7 @@ namespace u_market.Controllers
             // authenticated users cannot register
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Home", "Genres");
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
