@@ -24,29 +24,36 @@ namespace u_market.Controllers
             this.Ctx = Ctx;
         }
 
-        public IActionResult Index([FromQuery(Name = "store")] int store, [FromQuery(Name = "price")] double price)
+        public IActionResult Index([FromQuery(Name = "store")] int? store, [FromQuery(Name = "price")] double? price, [FromQuery(Name = "tag")] int? tag)
         {
+            ViewBag.Products = GetAll(store, price, tag);
+
             ViewBag.Stores = GetAllStores();
             ViewBag.Prices = GetPrices();
-            ViewBag.Products = GetAll(store, price);
+            ViewBag.Tags = GetTags();
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             ViewBag.Username = claims.ToArray()[0].ToString().Split(' ')[1];
             return View();
         }
 
-        private IList<Product> GetAll(int storeId, double price)
+        private IList<Product> GetAll(int? storeId, double? price, int? tagId)
         {
             IQueryable<Product> products = this.Ctx.Products;
 
-            if (storeId != 0)
+            if (storeId != null)
             {
                 products = products.Where(p => p.StoreId == storeId);
             }
 
-            if (price != 0)
+            if (price != null)
             {
                 products = products.Where(p => p.Price == price);
+            }
+
+            if (tagId != null)
+            {
+                //products = products.Include(p => p.Tags).Where(p => p.Tags.Where(t => t.Id == tagId));
             }
 
             return products.Include(p => p.Store).ToList();
@@ -67,6 +74,11 @@ namespace u_market.Controllers
         private IList<Store> GetAllStores()
         {
             return this.Ctx.Stores.ToList();
+        }
+
+        private IList<Tag> GetTags()
+        {
+            return this.Ctx.Tags.ToList();
         }
     }
 }

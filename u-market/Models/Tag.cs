@@ -8,7 +8,7 @@ namespace u_market.Models
     {
         [Key]
         [Column("tag_id")]
-        public int TagId { get; set; }
+        public int Id { get; set; }
 
         [Column("name")]
         [Required]
