@@ -23,9 +23,10 @@ namespace u_market.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().ToTable("products").Property(p => p.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Store>().ToTable("stores");
+            modelBuilder.Entity<Store>().ToTable("stores").Property(s => s.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>().ToTable("users");
             modelBuilder.Entity<Purchase>().ToTable("purchases").HasKey(c => new { c.Username, c.ProductId, c.PurchaseDate });
+            modelBuilder.Entity<Tag>().ToTable("tags").Property(t => t.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Tag>().ToTable("tags").HasMany<Product>(t => t.Products).WithMany(p => p.Tags)
                 .UsingEntity<Dictionary<string, object>>(
                 "product_tags",

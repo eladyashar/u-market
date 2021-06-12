@@ -2,4 +2,55 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Tags Management";
+    Layout = "_Layout";
+}
+<head>
+    <link rel="stylesheet" href="~/css/tag.css" />
+</head>
+
+<div class="tag-management-container">
+    <table class="table table-dark table-striped table-hover tags-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">tag id</th>
+                <th scope="col">tag name</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tagsTableBody">
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal-->
+<div class="modal fade" id="editTagModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Tag</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="Id" class="form-label">Tag ID</label>
+                    <input for="Id" type="text" disabled class="form-control" id="tagId" />
+                </div>
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Tag Name</label>
+                    <input for="Name" type="text" class="form-control" id="tagName" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                <button id="submit" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/tag.js"></script>
 }

@@ -1,0 +1,9 @@
+﻿.fa-pen, .fa-trash {
+    cursor: pointer;
+}
+
+.fa-pen:hover, .fa-trash:hover {
+    color: gray;
+    transform: rotate(360deg);
+    transition: transform 2s;
+}
