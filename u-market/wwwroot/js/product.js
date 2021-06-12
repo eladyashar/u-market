@@ -37,4 +37,8 @@
             window.location.href = newUrl;
         });
     });
+
+    $("#clear-btn").click(() => {
+        window.location.href = window.location.href.split("?")[0]
+    });
 });
