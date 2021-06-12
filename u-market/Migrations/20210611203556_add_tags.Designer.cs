@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using u_market.DAL;
@@ -9,9 +10,10 @@ using u_market.DAL;
 namespace u_market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    partial class MarketContextModelSnapshot : ModelSnapshot
+    [Migration("20210611203556_add_tags")]
+    partial class add_tags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,7 +21,7 @@ namespace u_market.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("product_tags", b =>
+            modelBuilder.Entity("product_tag", b =>
                 {
                     b.Property<int>("product_id")
                         .HasColumnType("integer");
@@ -31,7 +33,7 @@ namespace u_market.Migrations
 
                     b.HasIndex("tag_id");
 
-                    b.ToTable("product_tags");
+                    b.ToTable("product_tag");
                 });
 
             modelBuilder.Entity("u_market.Models.Product", b =>
@@ -175,7 +177,7 @@ namespace u_market.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("product_tags", b =>
+            modelBuilder.Entity("product_tag", b =>
                 {
                     b.HasOne("u_market.Models.Product", null)
                         .WithMany()

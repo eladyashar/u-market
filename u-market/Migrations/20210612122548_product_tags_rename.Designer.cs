@@ -10,8 +10,8 @@ using u_market.DAL;
 namespace u_market.Migrations
 {
     [DbContext(typeof(MarketContext))]
-    [Migration("20210611124232_add_tags")]
-    partial class add_tags
+    [Migration("20210612122548_product_tags_rename")]
+    partial class product_tags_rename
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,17 +21,17 @@ namespace u_market.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("ProductTag", b =>
+            modelBuilder.Entity("product_tags", b =>
                 {
-                    b.Property<int>("ProductsId")
+                    b.Property<int>("product_id")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TagsTagId")
+                    b.Property<int>("tag_id")
                         .HasColumnType("integer");
 
-                    b.HasKey("ProductsId", "TagsTagId");
+                    b.HasKey("product_id", "tag_id");
 
-                    b.HasIndex("TagsTagId");
+                    b.HasIndex("tag_id");
 
                     b.ToTable("product_tags");
                 });
@@ -127,7 +127,7 @@ namespace u_market.Migrations
 
             modelBuilder.Entity("u_market.Models.Tag", b =>
                 {
-                    b.Property<int>("TagId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("tag_id")
@@ -138,7 +138,7 @@ namespace u_market.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.HasKey("TagId");
+                    b.HasKey("Id");
 
                     b.ToTable("tags");
                 });
@@ -177,17 +177,17 @@ namespace u_market.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("ProductTag", b =>
+            modelBuilder.Entity("product_tags", b =>
                 {
                     b.HasOne("u_market.Models.Product", null)
                         .WithMany()
-                        .HasForeignKey("ProductsId")
+                        .HasForeignKey("product_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("u_market.Models.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsTagId")
+                        .HasForeignKey("tag_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

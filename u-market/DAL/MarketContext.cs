@@ -13,6 +13,7 @@ namespace u_market.DAL
         public DbSet<Store> Stores { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         public MarketContext(DbContextOptions<MarketContext> options) : base(options)
         {
@@ -25,7 +26,11 @@ namespace u_market.DAL
             modelBuilder.Entity<Store>().ToTable("stores");
             modelBuilder.Entity<User>().ToTable("users");
             modelBuilder.Entity<Purchase>().ToTable("purchases").HasKey(c => new { c.Username, c.ProductId, c.PurchaseDate });
-            modelBuilder.Entity<Tag>().ToTable("tags").HasMany<Product>(t => t.Products).WithMany(p => p.Tags).UsingEntity(pt => pt.ToTable("product_tags"));
+            modelBuilder.Entity<Tag>().ToTable("tags").HasMany<Product>(t => t.Products).WithMany(p => p.Tags)
+                .UsingEntity<Dictionary<string, object>>(
+                "product_tags",
+                pt => pt.HasOne<Product>().WithMany().HasForeignKey("product_id").OnDelete(DeleteBehavior.Cascade),
+                pt => pt.HasOne<Tag>().WithMany().HasForeignKey("tag_id").OnDelete(DeleteBehavior.Cascade));
         }
     }
 }   

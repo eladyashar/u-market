@@ -47,7 +47,14 @@
             <option value=@price>@price</option>
         }
     </select>
-    <button class="btn btn-danger" onclick="clear()">
+    <select class="form-control tag" name="tag">
+        <option value="" disabled selected>Select a tag</option>
+        @foreach (var tag in ViewBag.Tags)
+        {
+            <option value=@tag.Id>@tag.Name</option>
+        }
+    </select>
+    <button id="clear-btn" class="btn btn-danger">
         clear all
     </button>
 </section>

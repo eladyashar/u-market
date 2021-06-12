@@ -9,7 +9,7 @@
         });
     }
 
-    const filterTypes = ["store", "price"];
+    const filterTypes = ["store", "price", "tag"];
     filterTypes.map(type => {
         $(`select.${type}`).change(function () {
             const seletedType = $(this).children("option:selected").val();
@@ -36,5 +36,9 @@
 
             window.location.href = newUrl;
         });
+    });
+
+    $("#clear-btn").click(() => {
+        window.location.href = window.location.href.split("?")[0]
     });
 });
