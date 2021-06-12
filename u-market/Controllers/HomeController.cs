@@ -39,7 +39,7 @@ namespace u_market.Controllers
 
         private IList<Product> GetAll(int? storeId, double? price, int? tagId)
         {
-            IQueryable<Product> products = this.Ctx.Products;
+            IQueryable<Product> products = this.Ctx.Products.Include(p => p.Store);
 
             if (storeId != null)
             {
@@ -53,10 +53,10 @@ namespace u_market.Controllers
 
             if (tagId != null)
             {
-                //products = products.Include(p => p.Tags).Where(p => p.Tags.Where(t => t.Id == tagId));
+                products = products.Include(p => p.Tags).Where(p => p.Tags.Where(t  => t.Id == tagId).Count() >= 1);
             }
 
-            return products.Include(p => p.Store).ToList();
+            return products.ToList();
         }
 
         private IList<double> GetPrices()

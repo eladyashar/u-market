@@ -28,7 +28,8 @@ namespace u_market
         {
             services.AddControllersWithViews();
             services.AddDbContext<MarketContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("u-market")));
+                options.UseNpgsql(Configuration.GetConnectionString("u-market"))
+                .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
             services.AddSession(options => options.IdleTimeout = TimeSpan.FromMilliseconds(200));
 
