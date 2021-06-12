@@ -40,11 +40,6 @@ namespace u_market
                 {
                     options.LoginPath = "/users/login";
                 });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
