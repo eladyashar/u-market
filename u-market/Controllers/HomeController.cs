@@ -10,6 +10,7 @@ using u_market.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace u_market.Controllers
 {
@@ -23,32 +24,61 @@ namespace u_market.Controllers
             this.Ctx = Ctx;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery(Name = "store")] int? store, [FromQuery(Name = "price")] double? price, [FromQuery(Name = "tag")] int? tag)
         {
-            ViewBag.Products = GetAll();
+            ViewBag.Products = GetAll(store, price, tag);
+
+            ViewBag.Stores = GetAllStores();
+            ViewBag.Prices = GetPrices();
+            ViewBag.Tags = GetTags();
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             ViewBag.Username = claims.ToArray()[0].ToString().Split(' ')[1];
             return View();
         }
 
-        private List<Product> GetAll()
+        private IList<Product> GetAll(int? storeId, double? price, int? tagId)
         {
-            return Ctx.Products.Include(p => p.Store).ToList();
+            IQueryable<Product> products = this.Ctx.Products.Include(p => p.Store);
+
+            if (storeId != null)
+            {
+                products = products.Where(p => p.StoreId == storeId);
+            }
+
+            if (price != null)
+            {
+                products = products.Where(p => p.Price == price);
+            }
+
+            if (tagId != null)
+            {
+                products = products.Include(p => p.Tags).Where(p => p.Tags.Where(t  => t.Id == tagId).Count() >= 1);
+            }
+
+            return products.ToList();
         }
 
-        public ActionResult Privacy(string name, int numTimes = 1)
+        private IList<double> GetPrices()
         {
-            ViewBag.Message = "Hello World!" + name;
-            //ViewBag.ProductNames = logic.GetAll().Select(x => x.Name);
-
-            return View();
+            return this.Ctx.Products.GroupBy(p => p.Price).Select(p => p.Key).ToList();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        // TODO: move to store logic
+        private IList<Store> GetAllStores()
+        {
+            return this.Ctx.Stores.ToList();
+        }
+
+        private IList<Tag> GetTags()
+        {
+            return this.Ctx.Tags.ToList();
         }
     }
 }

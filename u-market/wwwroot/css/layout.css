@@ -44,3 +44,7 @@ body {
 .page-body {
     width: 100%;
 }
+
+.greeting {
+    color: white
+}

@@ -28,7 +28,8 @@ namespace u_market
         {
             services.AddControllersWithViews();
             services.AddDbContext<MarketContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("u-market")));
+                options.UseNpgsql(Configuration.GetConnectionString("u-market"))
+                .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
             services.AddSession(options => options.IdleTimeout = TimeSpan.FromMilliseconds(200));
 
@@ -39,11 +40,6 @@ namespace u_market
                 {
                     options.LoginPath = "/users/login";
                 });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

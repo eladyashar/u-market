@@ -11,29 +11,33 @@
         edit store
     </button>
 </div>
-<div class="cards">
-    @foreach (var product in @ViewBag.StoreDetails.Products)
-    {
-        <div class="card-container">
-            <div class="card">
-                <img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
-                     class="card-img-top image-container" alt="">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text product-desc">@product.Description</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">@product.Store.Name shop</li>
-                    <li class="list-group-item">@product.Price$</li>
-                </ul>
-                <div class="card-body card-bottom">
-                    <i class="btn far fa-thumbs-up"></i>
-                    <button type="button" class="btn btn-primary btn-sm">Buy me!</button>
-                </div>
-            </div>
-        </div>
-    }
-
+<div class="products-table-container">
+    <table class="table table-dark table-striped table-hover products-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">name</th>
+                <th scope="col">price</th>
+                <th scope="col">description</th>
+                <th scope="col">image</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+            @foreach (var product in @ViewBag.StoreDetails.Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td>@product.Description</td>
+                    <td><img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
+     class="product-image" alt=""></td>
+                    <td><i class='fa fa-pen' onclick='openModalForUpdate("@product.Name", @product.Price, "@product.Description", "@product.ImageUrl", @product.Id)'></i></td>
+                    <td><i class='fa fa-trash' onclick="deleteProduct(@product.Id)"></i></td>
+                </tr>
+            }
+            </tbody>
+    </table>
 </div>
 
 <!-- Modal product-->
@@ -84,10 +88,22 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="name" class="form-label">store name</label>
-                    <input type="text" class="form-control" id="name" placeholder="basketball">
+                    <label for="storeName" class="form-label">store name</label>
+                    <input type="text" class="form-control" id="storeName" placeholder="basketball">
                 </div>
-                <div id="map"></div>
+                <div class="mb-3">
+                    <label for="lat" class="form-label">store name</label>
+                    <input type="text" class="form-control" id="lat" placeholder="basketball">
+                </div>
+                <div class="mb-3">
+                    <label for="lang" class="form-label">store name</label>
+                    <input type="text" class="form-control" id="lang" placeholder="basketball">
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">address</label>
+                    <input type="text" class="form-control" autocomplete="off" id="address">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
@@ -99,6 +115,32 @@
 <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH3CKQPJVqp2uyqXF9t0zQlPorVNaMhHU&callback=initMap"></script>
 <script>
+    address1Field = document.querySelector("#address");
+    autocomplete = new google.maps.places.Autocomplete(address1Field, {
+        componentRestrictions: { country: ["us", "ca"] },
+        fields: ["address_components", "geometry"],
+        types: ["address"],
+    });
+    address1Field.focus();
+
+    function updateStore() {
+        var storeData = {
+            "Id": @ViewBag.StoreDetails.Id,
+            "Name": $("#storeName").val(),
+            "Lat": $("#lat").val(),
+            "Lang": $("#lang").val(),
+            "OwnerId": @ViewBag.StoreDetails.OwnerId,
+        }
+            $.post("/Store/UpdateStore", storeData, (data, status, xhr) => {
+            if (status == "success") {
+                alert("the store updated succesfully");
+                window.location.href = "/Store/Index";
+            } else {
+                alert("error ocured while trying to update the store");
+            }
+        });
+    }
+
     function saveProduct() {
         var formData = {
             "Name": $("#name").val(),
@@ -109,7 +151,34 @@
         }
         $.post("/Store/AddProduct", formData, (data, status, xhr) => {
             if (status == "success") {
-                alert("good");
+                alert("the product added succesfully");
+                window.location.href = "/Store/Index";
+            } else {
+                alert("error ocured while trying to save the product");
+            }
+        });
+    }
+    const openModalForUpdate = (name, price, description, imageUrl, productId) => {
+        $("#name").val(name);
+        $("#price").val(price);
+        $("#image").val(imageUrl);
+        $("#description").val(description);
+        $("#addProduct").find('#submit').attr('onclick', `UpdateProduct(${productId})`)
+        $("#addProduct").modal('show');
+    }
+
+    function UpdateProduct(productId) {
+        var productData = {
+            "Id": productId,
+            "Name": $("#name").val(),
+            "StoreId": @ViewBag.StoreDetails.Id,
+            "Price": $("#price").val(),
+            "ImageUrl": $("#image").val(),
+            "Description": $("#description").val(),
+        }
+        $.post("/Store/UpdateProduct", productData, (data, status, xhr) => {
+            if (status == "success") {
+                alert("the product updated succesfully");
                 window.location.href = "/Store/Index";
             } else {
                 alert("error ocured while trying to save the product");
@@ -117,12 +186,17 @@
         });
     }
 
-    let map;
-
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: -34.397, lng: 150.644 },
-            zoom: 8,
-        });
+    const deleteProduct = (productId) => {
+        if (confirm("are you sure that you want to delete this product?")) {
+            const pdata = { "productId": productId }
+            $.post("/Store/RemoveProduct", pdata, (data, status, xhr) => {
+                if (status == "success") {
+                    alert("the prodduct deleted!");
+                    window.location.href = "/Store/Index";
+                } else {
+                    alert("error ocured while trying to save the product");
+                }
+            });
+        }
     }
 </script>
