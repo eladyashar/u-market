@@ -27,3 +27,19 @@
     transform: rotate(360deg);
     transition: transform 2s;
 }
+
+.pac-container {
+    background-color: #FFF;
+    z-index: 20;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+
+.modal {
+    z-index: 20;
+}
+
+.modal-backdrop {
+    z-index: 10;
+}
