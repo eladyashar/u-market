@@ -11,7 +11,7 @@
 
 <section>
     <div class="input-group-prepend">
-        <input placeholder="Search tag" class="form-control" type="search" />
+        <input id="search-tag" placeholder="Search tag" class="form-control" type="search" />
         <button id="new-tag" class="btn btn-primary" onclick="$('#addTagModal').modal('show')">Add new tag</button>
     </div>
 </section>
@@ -82,5 +82,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/lib/lodash/lodash.min.js"></script>
     <script src="~/js/tag.js"></script>
 }

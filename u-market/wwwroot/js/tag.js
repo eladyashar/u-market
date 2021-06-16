@@ -1,7 +1,9 @@
 ﻿let allTags = []
-const loadAllTags = () =>
-    $.ajax({
-        url: '/Tag/GetAll/',
+let filterQuery = '';
+const loadAllTags = () => {
+    const url = filterQuery ? `/Tag/GetAll?filter=${filterQuery}` : '/Tag/GetAll';
+    return $.ajax({
+        url: url,
         type: 'GET',
         success: (data) => {
             allTags = data;
@@ -10,6 +12,7 @@ const loadAllTags = () =>
             alert('an error occured');
         }
     });
+}
 
 const validateTag = (tagName) => {
     return tagName;
@@ -103,4 +106,8 @@ const removeTag = tagId => {
 
 $(document).ready(() => {
     generateTagsTable();
+    $("#search-tag").on("input", _.debounce(() => {
+        filterQuery = $("#search-tag").val();
+        generateTagsTable();
+    }, 1000));
 });

@@ -26,9 +26,9 @@ namespace u_market.Controllers.Tags
 
         [HttpGet]
         [Authorize(Roles = "Admin,Client")]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string? filter)
         {
-            return Ok(Logic.GetAll());
+            return Ok(Logic.GetAll(filter));
         }
 
         [HttpPut]
