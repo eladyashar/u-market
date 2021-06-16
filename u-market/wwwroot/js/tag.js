@@ -12,7 +12,7 @@ const loadAllTags = () =>
     });
 
 const validateTag = (tagName) => {
-    return !tagName;
+    return tagName;
 } 
 
 const generateTagsTable = () => {

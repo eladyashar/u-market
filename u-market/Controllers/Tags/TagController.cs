@@ -39,7 +39,7 @@ namespace u_market.Controllers.Tags
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Add([FromBody] Tag tag)
         {
