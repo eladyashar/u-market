@@ -11,6 +11,10 @@ const loadAllTags = () =>
         }
     });
 
+const validateTag = (tagName) => {
+    return !tagName;
+} 
+
 const generateTagsTable = () => {
     const tableBodyElement = $('#tagsTableBody');
     tableBodyElement.empty();
@@ -39,23 +43,49 @@ const openEditModal = tag => {
     editModal.modal('show');
 }
 
+
+const addTag = () => {
+    const newTagName = $('#addTagModal #tagName').val();
+    if (!validateTag(newTagName)) {
+        // TODO: add alert
+    } else {
+        $.ajax({
+            url: '/Tag/Add/',
+            type: 'Post',
+            data: JSON.stringify({ name: `${newTagName}` }),
+            contentType: "application/json; charset=utf-8",
+            success: () => {
+                $('#addTagModal').modal('hide');
+                generateTagsTable();
+            },
+            error: () => {
+                alert('an error occured');
+            }
+        });
+    }
+}
+
 const saveTag = () => {
 
     const [newTagName, tagId] = [$('#editTagModal #tagName').val(), $('#editTagModal #tagId').val()];
 
-    $.ajax({
-        url: '/Tag/UPDATE/',
-        type: 'PUT',
-        data: JSON.stringify({ id: parseInt(tagId), name: `${newTagName}`}),
-        contentType: "application/json; charset=utf-8",
-        success: () => {
-            $('#editTagModal').modal('hide');
-            generateTagsTable();
-        },
-        error: () => {
-            alert('an error occured');
-        }
-    });
+    if (!validateTag(newTagName)) {
+        // TODO: add alert
+    } else {
+        $.ajax({
+            url: '/Tag/UPDATE/',
+            type: 'PUT',
+            data: JSON.stringify({ id: parseInt(tagId), name: `${newTagName}` }),
+            contentType: "application/json; charset=utf-8",
+            success: () => {
+                $('#editTagModal').modal('hide');
+                generateTagsTable();
+            },
+            error: () => {
+                alert('an error occured');
+            }
+        });
+    }
 };
 
 const removeTag = tagId => {

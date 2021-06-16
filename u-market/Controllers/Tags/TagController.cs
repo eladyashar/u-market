@@ -39,6 +39,14 @@ namespace u_market.Controllers.Tags
             return Ok();
         }
 
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Add([FromBody] Tag tag)
+        {
+            Logic.AddTag(tag);
+            return Ok();
+        }
+
         [HttpDelete]
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)

@@ -31,5 +31,11 @@ namespace u_market.Controllers.Tags
             this.Ctx.Tags.Update(tag);
             this.Ctx.SaveChanges();
         }
+
+        public void AddTag(Tag tag)
+        {
+            this.Ctx.Tags.Add(tag);
+            this.Ctx.SaveChanges();
+        }
     }
 }
