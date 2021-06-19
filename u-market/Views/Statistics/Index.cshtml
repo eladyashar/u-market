@@ -23,12 +23,14 @@
    
     //console.log(series);
 
+    var width = 800;
+    var height = 200;
 
     var base = d3.select("#vis");
 
     var chart = base.append("canvas")
-        .attr("width", 800)
-        .attr("height", 200);
+        .attr("width", width)
+        .attr("height", height);
     var context = chart.node().getContext("2d");
 
     var dataContainer = base.append("custom");
@@ -36,7 +38,7 @@
     function drawCustom(data) {
         var scale = d3.scaleLinear()
             .range(d3.extent(data.map(d => d.y)).reverse())
-            .domain(d3.extent(data.map(d => d.x)));
+            .domain(d3.extent(data.map(d => d.x*data.length*50)));
 
         var dataBinding = dataContainer.selectAll("custom.rect")
             .data(data);
@@ -48,10 +50,11 @@
         dataBinding.enter()
             .append("custom")
             .classed("rect", true)
-            .attr("x", d => d.x)
-            .attr("y", 200)
-            .attr("height", d => -scale(d.y))
-            .attr("width", 5)
+            .attr("x", d => (d.x * width / data.length) - (width / data.length))
+            .attr("y", 100)
+            //.attr("height", d => -scale(d.y))
+            .attr("height", d => -(d.y))
+            .attr("width", width/data.length -20)
             .attr("fillStyle", "blue")
             .attr("product", d => d.product)
 
@@ -82,11 +85,11 @@
             //Drawing Text
             context.fillStyle = "black";
             //There are several options for setting text
-            context.font = "10px Open Sans";
+            context.font = "15px Open Sans";
             //textAlign supports: start, end, left, right, center
             context.textAlign = "start"
             //textBaseline supports: top, hanging, middle, alphabetic, ideographic bottom
-            context.textBaseline = "ideographic bottom"
+            context.textBaseline = "hanging"
             context.fillText(node.attr("product"), node.attr("x"), node.attr("y"));
 
             context.closePath();
@@ -94,7 +97,10 @@
         })
     }
 
-    drawCustom([{ x: 20, y: 20, product: "rami" }, { x: 40, y: 50, product: "yoni" }, { x: 60, y: 44, product: "uriel" }]);
+    drawCustom([{ x: 1, y: 20, product: "rami" }, { x: 2, y: 50, product: "yoni" }, { x: 3, y: 44, product: "uriel" },
+        { x: 4, y: 20, product: "rami" }, { x: 5, y: 50, product: "yoni" }, { x: 6, y: 44, product: "uriel" },
+        { x: 7, y: 20, product: "rami" }, { x: 8, y: 50, product: "yoni" }, { x: 9, y: 44, product: "uriel" },
+        { x: 10, y: 20, product: "rami" }, { x: 11, y: 50, product: "yoni" }, { x: 12, y: 44, product: "uriel" }]);
 
 
     // Work with svg
