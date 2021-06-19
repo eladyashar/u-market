@@ -10,16 +10,20 @@ using u_market.DAL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
-namespace u_market.Controllers
+namespace u_market.Controllers.Statistics
 {
     [Authorize(Roles = "Admin,Client")]
     public class StatisticsController : Controller
     {
         private readonly MarketContext Ctx;
-        public StatisticsController(MarketContext Ctx)
+        private StatisticsLogic Logic;
+
+        public StatisticsController(MarketContext context)
         {
-            this.Ctx = Ctx;
+            Ctx = context;
+            Logic = new StatisticsLogic(context);
         }
 
         public IActionResult Index()
@@ -29,9 +33,8 @@ namespace u_market.Controllers
 
         public IActionResult GetAll()
         {
-            //return Ok(Logic.GetAll());
-            return View();
-
+            return Json(JsonConvert.SerializeObject(Logic.GetAll()));
         }
+
     }
 }
