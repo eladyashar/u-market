@@ -6,6 +6,7 @@ using u_market.DAL;
 using Microsoft.EntityFrameworkCore;
 using u_market.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,21 +14,27 @@ namespace u_market.Controllers.Purchases
 {
     public class PurchaseController : Controller
     {
-        private readonly MarketContext Ctx;
+        private PurchaseLogic Logic { get; }
+
         public PurchaseController(MarketContext Ctx)
         {
-            this.Ctx = Ctx;
+            Logic = new PurchaseLogic(Ctx);
         }
-        // GET: /<controller>/
+
         public IActionResult Index()
         {
-            ViewBag.Purchases = getAll();
+            @ViewBag.Data = GetAll("");
+            @ViewBag.Purchases = @ViewBag.Data.Value;
             return View();
         }
-        public IList<Purchase> getAll()
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Client")]
+        public IActionResult GetAll(string? filter)
         {
-            return Ctx.Purchases.Include(c=>c.Product).Include(p=> p.User).ToList();
+            return Ok(Logic.GetAll(filter));
         }
+
     }
 }
  

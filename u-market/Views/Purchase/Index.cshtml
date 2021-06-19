@@ -1,11 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
     ViewData["Title"] = "Purchase History";
     Layout = "_Layout";
 }
-@model u_market.Models.Purchase 
+@model u_market.Models.Purchase
 <head>
     <link rel="stylesheet" href="~/css/purchase.css" />
 </head>
@@ -26,12 +24,12 @@
             <tbody>
                 @foreach (var Purchase in @ViewBag.Purchases)
                 {
-                <tr>
-                    <td>@Purchase.Username</td>
-                    <td>@Purchase.Product.Name</td>
-                    <td>@Purchase.Product.Price</td>
-                    <td>@Purchase.PurchaseDate</td>
-                </tr>
+                    <tr>
+                        <td>@Purchase.Username</td>
+                            <td>@Purchase.Product.Name</td>
+                            <td>@Purchase.Product.Price</td>
+                            <td>@Purchase.PurchaseDate</td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -40,8 +38,8 @@
 
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script src="~/lib/lodash/lodash.min.js"></script>
-    <script src="~/js/tag.js"></script>
-}
+@*@section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/lodash/lodash.min.js"></script>
+        <script src="~/js/tag.js"></script>
+    }*@
