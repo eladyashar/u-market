@@ -52,7 +52,6 @@ const openEditModal = userIndex => {
     const editModal = $('#editUserModal');
 
     editModal.find('#username').attr('placeholder', user.username);
-    editModal.find('#password').attr('placeholder', user.password);
     editModal.find('#firstName').attr('placeholder', user.firstName);
     editModal.find('#lastName').attr('placeholder', user.lastName);
     editModal.find('#role').children(`option[value=${user.userRole.toString()}]`).attr('selected', true);
