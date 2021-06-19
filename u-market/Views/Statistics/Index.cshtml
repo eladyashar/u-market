@@ -2,26 +2,23 @@
 }
 <h1>Statistics</h1>
 <script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
 
 
 <div id="vis">
 
 </div>
 <script>
-
-    //const data = [
-    //    { name: "123", month: 0, apples: 3840, bananas: 1920, cherries: 960, dates: 400 },
-    //    { name: "456", month: 50, apples: 1600, bananas: 1440, cherries: 960, dates: 400 },
-    //    { name: "789", month: 100, apples: 640, bananas: 960, cherries: 640, dates: 400 },
-    //    { name: "10", month: 150, apples: 320, bananas: 480, cherries: 640, dates: 400 }
-    //];
-    //const stack = d3.stack()
-    //    .keys(["apples", "bananas", "cherries", "dates"])
-    //    .order(d3.stackOrderNone)
-    //    .offset(d3.stackOffsetNone);
-    //const series = stack(data);
-   
-    //console.log(series);
+    const getAllPurchases = () => {
+           return $.get("/Statistics/GetAll", (data, status) => {
+                if (status != "success") {
+                    alert("error ocured while trying to get the statistics");
+                } else {
+                    return data;
+                }
+            });
+    };
 
     var width = 800;
     var height = 200;
@@ -46,7 +43,7 @@
         //dataBinding
         //    .attr("size", 15)
         //    .attr("fillStyle", "green");
-  
+
         dataBinding.enter()
             .append("custom")
             .classed("rect", true)
@@ -95,8 +92,22 @@
             context.closePath();
 
         })
+ 
     }
+    let countOfPurchasesByName;
 
+    getAllPurchases().then((res, rej) => {
+        try {
+            countOfPurchasesByName = res;
+        } catch (err) {
+            console.log(err);
+            console.log(rej);
+        }
+    });
+    //let count = 0;
+    //countOfPurchasesByName = countOfPurchasesByName.map(x => {
+    //    return ({ x: count++, y: x.count, x.name })
+    //});
     drawCustom([{ x: 1, y: 20, product: "rami" }, { x: 2, y: 50, product: "yoni" }, { x: 3, y: 44, product: "uriel" },
         { x: 4, y: 20, product: "rami" }, { x: 5, y: 50, product: "yoni" }, { x: 6, y: 44, product: "uriel" },
         { x: 7, y: 20, product: "rami" }, { x: 8, y: 50, product: "yoni" }, { x: 9, y: 44, product: "uriel" },
