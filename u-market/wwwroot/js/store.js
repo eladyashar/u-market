@@ -16,23 +16,24 @@ const generateStoresTable = async () => {
 
     allStores.forEach(async (store, storeIndex) => {
         await generateStoreDetailsRow(store, storeIndex);
-
-        const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
-        const addStroeCol = addStoreRow.append('<td colspan="100%" class="add-store-row" onclick="openAddStoreModal()">').children('td:last');
-        addStroeCol.append(`<i class="fas fa-plus"></i>`);
     });
+
+    const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
+    const addStroeCol = addStoreRow.append('<td colspan="100%" class="add-store-row" onclick="openAddStoreModal()">').children('td:last');
+    addStroeCol.append(`<i class="fas fa-plus"></i>`);
 };
 
-const loadAllStores = async () =>
+const loadAllStores = async () => {
     allStores = await $.ajax({
         url: '/Store/GetAll/',
         type: 'GET'
     });
+};
 
 const generateStoreDetailsRow = async (store, storeIndex) => {
     const storeAddress = await getAddress(store.lat, store.lang);
 
-    const detailsRow = $('#storesTableBody').append('<tr>').children('tr:last');
+    const detailsRow = $('#storesTableBody').prepend('<tr>').children('tr:first');
     detailsRow.append(`<td>${store.name}</td>`)
         .append(`<td>${store.owner.firstName} ${store.owner.lastName}</td>`)
         .append(`<td>${storeAddress}</td>`);
@@ -41,7 +42,7 @@ const generateStoreDetailsRow = async (store, storeIndex) => {
     editCol.append(`<i class='fa fa-pen' onclick="openEditStoreModal(${storeIndex})"></i>`);
 
     const deleteCol = detailsRow.append('<td>').children('td:last');
-    deleteCol.append(`<i class='fa fa-trash' onclick="alert('remove ${store.name}')"></i>`);
+    deleteCol.append(`<i class='fa fa-trash' onclick="removeStore(${store.id})"></i>`);
 };
 
 const getAddress = async (lat, lng) => {
@@ -58,7 +59,6 @@ const getAddress = async (lat, lng) => {
 };
 
 const openEditStoreModal = async storeIndex => {
-
     const store = allStores[storeIndex];
     const editModal = $('#storeModal');
     const storeAddress = await getAddress(store.lat, store.lang);
@@ -91,13 +91,12 @@ const saveStore = async storeIndex => {
     const [storeNameValue, addressValue] = [$('#storeModal #storeName').val(), $('#storeModal #address').val()];
 
     store.name = storeNameValue ? storeNameValue : store.name;
-    store.owner = isNaN(storeIndex) ? {} : store.owner;
+    store.owner = isNaN(storeIndex) ? null : store.owner;
     [store.lat, store.lang] = addressValue ? Object.values(await getLatLng(addressValue)) : [store.lat, store.lang];
 
     try {
         await (isNaN ? addStore(store) : updateStore(store));
-        resetInputs();
-        $('#storeModal').modal('hide');
+        closeStoreModal();
         generateStoresTable();
     }
     catch (error) {
@@ -122,9 +121,10 @@ const getLatLng = async address => {
     }
 };
 
-const resetInputs = () => {
+const closeStoreModal = () => {
     $('#storeModal #storeName').val('');
     $('#storeModal #address').val('');
+    $('#storeModal').modal('hide');
 };
 
 const updateStore = store =>
@@ -140,5 +140,18 @@ const addStore = store =>
         url: '/Store/Insert/',
         type: 'POST',
         data: JSON.stringify(store),
+        contentType: "application/json; charset=utf-8",
+    });
+
+const removeStore = async storeId => {
+    await deleteStore(storeId);
+    generateStoresTable();
+};
+
+const deleteStore = storeId =>
+    $.ajax({
+        url: '/Store/Delete/',
+        type: 'DELETE',
+        data: JSON.stringify(storeId),
         contentType: "application/json; charset=utf-8",
     });

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
 using u_market.Models;
 using Microsoft.EntityFrameworkCore;
+using u_market.Controllers.Users;
 
 namespace u_market.Controllers.Stores
 {
@@ -12,11 +13,13 @@ namespace u_market.Controllers.Stores
     {
         private readonly ProductLogic ProductLogic;
         private readonly StoreLogic StoreLogic;
+        private readonly UsersLogic UsersLogic;
 
         public StoreController(MarketContext ctx)
         {
-            this.ProductLogic = new ProductLogic(ctx);
-            this.StoreLogic = new StoreLogic(ctx);
+            ProductLogic = new ProductLogic(ctx);
+            StoreLogic = new StoreLogic(ctx);
+            UsersLogic = new UsersLogic(ctx);
         }
 
         public ActionResult Index()
@@ -33,9 +36,8 @@ namespace u_market.Controllers.Stores
         [HttpPost]
         public IActionResult Insert([FromBody] Store store)
         {
-            // TODO yoni - decide how to do this!
-            // store.Owner = User;
-            StoreLogic.Insert(store);
+            StoreLogic.Insert(store, User);
+
             return Ok();
         }
 
@@ -43,6 +45,15 @@ namespace u_market.Controllers.Stores
         public IActionResult Update([FromBody] Store store)
         {
             StoreLogic.Update(store);
+            
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete([FromBody] int storeId)
+        {
+            StoreLogic.Delete(storeId);
+
             return Ok();
         }
 
@@ -51,6 +62,7 @@ namespace u_market.Controllers.Stores
             try
             {
                 ProductLogic.AddProduct(product);
+                
                 return StatusCode(200);
             }
             catch
@@ -64,6 +76,7 @@ namespace u_market.Controllers.Stores
             try
             {
                 ProductLogic.UpdateProduct(product);
+                
                 return StatusCode(200);
             }
             catch
@@ -77,6 +90,7 @@ namespace u_market.Controllers.Stores
             try
             {
                 ProductLogic.RemoveProduct(productId);
+                
                 return StatusCode(200);
             }
             catch

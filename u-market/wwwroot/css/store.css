@@ -32,14 +32,19 @@
     transition: transform 2s;
 }
 
-.add-store-row {
+#storesTableBody tr {
     cursor: pointer;
+}
+
+.add-store-row {
     text-align: center;
 }
 
+#storesTableBody tr:hover {
+    color: orangered;
+}
+
 .add-store-row:hover {
-    cursor: pointer;
-    text-align: center;
     color: gray;
 }
 
