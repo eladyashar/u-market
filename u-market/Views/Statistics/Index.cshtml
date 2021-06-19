@@ -10,18 +10,8 @@
 
 </div>
 <script>
-    const getAllPurchases = () => {
-           return $.get("/Statistics/GetAll", (data, status) => {
-                if (status != "success") {
-                    alert("error ocured while trying to get the statistics");
-                } else {
-                    return data;
-                }
-            });
-    };
-
-    var width = 800;
-    var height = 200;
+    var width = 600;
+    var height = 500;
 
     var base = d3.select("#vis");
 
@@ -47,10 +37,10 @@
         dataBinding.enter()
             .append("custom")
             .classed("rect", true)
-            .attr("x", d => (d.x * width / data.length) - (width / data.length))
-            .attr("y", 100)
+            .attr("x", d => (d.x * width / data.length) - (width / data.length) + 20)
+            .attr("y", height - 20)
             //.attr("height", d => -scale(d.y))
-            .attr("height", d => -(d.y))
+            .attr("height", d => -(d.y) * height / data.length / 2)
             .attr("width", width/data.length -20)
             .attr("fillStyle", "blue")
             .attr("product", d => d.product)
@@ -94,49 +84,37 @@
         })
  
     }
-    let countOfPurchasesByName;
+    const getData = async() => {
+       return $.get("/Statistics/GetAll", (data, status) => {
+            if (status != "success") {
+                alert("error ocured while trying to get the statistics");
+            }
+            });
+    };
 
-    getAllPurchases().then((res, rej) => {
-        try {
-            countOfPurchasesByName = res;
-        } catch (err) {
-            console.log(err);
-            console.log(rej);
+    getData().then((data) => {
+        let counter = 1;
+        let jsonData = JSON.parse(data);
+        let arrForDraw = [];
+        for (o in jsonData) {
+            const obj = {
+                x: 0,
+                y: 0,
+                product:""
+            }
+            obj.x = counter++;
+            obj.y = jsonData[o]
+            obj.product = o
+            arrForDraw.push(obj);
         }
+        drawCustom(arrForDraw);
+
     });
-    //let count = 0;
-    //countOfPurchasesByName = countOfPurchasesByName.map(x => {
-    //    return ({ x: count++, y: x.count, x.name })
-    //});
-    drawCustom([{ x: 1, y: 20, product: "rami" }, { x: 2, y: 50, product: "yoni" }, { x: 3, y: 44, product: "uriel" },
-        { x: 4, y: 20, product: "rami" }, { x: 5, y: 50, product: "yoni" }, { x: 6, y: 44, product: "uriel" },
-        { x: 7, y: 20, product: "rami" }, { x: 8, y: 50, product: "yoni" }, { x: 9, y: 44, product: "uriel" },
-        { x: 10, y: 20, product: "rami" }, { x: 11, y: 50, product: "yoni" }, { x: 12, y: 44, product: "uriel" }]);
 
 
-    // Work with svg
-    //d3.select("#firstGraph").attr("height", height).attr("width", width)
-    //    .append("g")
-    //    .selectAll("g")
-    //    .data(series)
-    //    .join("g")
-    //        .attr("fill", d => {
-    //            switch (d.key) {
-    //                case "apples":
-    //                    return "#123456"
-    //                case "bananas":
-    //                    return "#723456"
-    //                case "cherries":
-    //                    return "#a23456"
-    //                case "dates":
-    //                    return "#f123456"
-    //            }
-    //        })
-    //    .selectAll("rect")
-    //    .data(d => d)
-    //    .join("rect")
-    //        .attr("x", d => (d["data"].month))
-    //        .attr("y", d => (d[0] / 30))
-    //        .attr("height", d => (d[1] - d[0]) / 30).attr("width", 35);
+    //drawCustom([{ x: 1, y: 20, product: "rami" }, { x: 2, y: 50, product: "yoni" }, { x: 3, y: 44, product: "uriel" },
+    //    { x: 4, y: 20, product: "rami" }, { x: 5, y: 50, product: "yoni" }, { x: 6, y: 44, product: "uriel" },
+    //    { x: 7, y: 20, product: "rami" }, { x: 8, y: 50, product: "yoni" }, { x: 9, y: 44, product: "uriel" },
+    //    { x: 10, y: 20, product: "rami" }, { x: 11, y: 50, product: "yoni" }, { x: 12, y: 44, product: "uriel" }]);
 
 </script>
