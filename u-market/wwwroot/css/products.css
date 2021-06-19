@@ -25,3 +25,7 @@
 .product-desc {
     height: 72px;
 }
+.price-line {
+    display: flex; 
+    justify-content: space-between;
+}

@@ -3,10 +3,9 @@
     Layout = "_Layout";
 
 }
-
-<link rel="stylesheet" href="~/css/products.css" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/product.js"></script>
+<link rel="stylesheet" href="~/css/products.css" />
 <script>
     const finishPurchase = function (name, id) {
         var Purchase = {
@@ -36,7 +35,8 @@
         newCurrency = $("#currency-" + elementId).val();
         const url = "https://free.currconv.com/api/v7/convert?q=ILS_" + newCurrency + "&compact=ultra&apiKey=c832ed4009e43d98f0fb";
         $.get(url, (data) => {
-            $("#price-" + elementId).text(priceInIls * data["ILS_" + newCurrency]);
+            const price = Number(priceInIls * data["ILS_" + newCurrency]);
+            $("#price-" + elementId).text(price.toFixed(2));
         });
     }
 </script>
@@ -86,13 +86,13 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">@product.Store.Name shop</li>
-                        <li class="list-group-item">
-                            <p id="price-@product.Id">@product.Price</p>
-                            <select id="currency-@product.Id" onchange="changeCurrency(@product.Price, '@product.Id')">
-                                <option value="ILS">ILS</option>
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                            </select>
+                        <li class="price-line list-group-item">
+                                <div id="price-@product.Id">@product.Price</div>
+                                <select id="currency-@product.Id" onchange="changeCurrency(@product.Price, '@product.Id')">
+                                    <option value="ILS">ILS</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
                         </li>
                     </ul>
                     <div class="card-body card-bottom">
