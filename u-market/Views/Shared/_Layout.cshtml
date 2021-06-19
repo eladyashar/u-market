@@ -34,7 +34,7 @@
         @if (User.Identity.IsAuthenticated)
         {
             <!-- Sidebar-->
-            <div class="sidebar">
+            <div class="sidebar">                   
                 <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
                     <li class="nav-item">
                         <a class="nav-link border-bottom" title="Home" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Home" asp-action="Index">
@@ -42,7 +42,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link border-bottom" title="statistics" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Home" asp-action="Privacy">
+                        <a class="nav-link border-bottom" title="statistics" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Statistics" asp-action="Index">
                             <i class="fas fa-chart-line sidebar-item"></i>
                         </a>
                     </li>
@@ -65,28 +65,28 @@
                         </li>
                     }
                 </ul>
+            </div>  
+                    }
+                    <!-- Page content-->
+                    <div class="page-body">
+                        @RenderBody()
+                    </div>
             </div>
-        }
-            <!-- Page content-->
-            <div class="page-body">
-                @RenderBody()
-            </div>
-        </div>
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-        <script>
-            window.fbAsyncInit = function () {
-                FB.init({
-                    appId: '181768927205442',
-                    autoLogAppEvents: true,
-                    xfbml: true,
-                    version: 'v1.0'
-                });
-            };
-        </script>
-        <!-- CSS only -->
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @RenderSection("Scripts", required: false)
-    </body>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+            <script>
+                window.fbAsyncInit = function () {
+                    FB.init({
+                        appId: '181768927205442',
+                        autoLogAppEvents: true,
+                        xfbml: true,
+                        version: 'v1.0'
+                    });
+                };
+            </script>
+            <!-- CSS only -->
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            @RenderSection("Scripts", required: false)
+</body>
 </html>
