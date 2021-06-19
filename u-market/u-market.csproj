@@ -20,6 +20,8 @@
     <Folder Include="Controllers\Statistics\" />
     <Folder Include="Migrations\" />
     <Folder Include="Views\Store\" />
+    <Folder Include="Controllers\Purchases\" />
+    <Folder Include="Views\Purchase\" />
   </ItemGroup>
 
 </Project>
