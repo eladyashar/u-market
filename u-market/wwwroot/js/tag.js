@@ -15,7 +15,7 @@ const loadAllTags = () => {
 }
 
 const validateTag = (tagName) => {
-    return tagName;
+    return true;
 } 
 
 const generateTagsTable = () => {
@@ -50,8 +50,9 @@ const openEditModal = tag => {
 const addTag = () => {
     const newTagName = $('#addTagModal #tagName').val();
     if (!validateTag(newTagName)) {
-        // TODO: add alert
+        $("#add-tag-name-error").text("Tag name does not meet requirements");
     } else {
+        $("#add-tag-name-error").text("");
         $.ajax({
             url: '/Tag/Add/',
             type: 'Post',
@@ -63,6 +64,9 @@ const addTag = () => {
             },
             error: () => {
                 alert('an error occured');
+            },
+            complete: () => {
+                $('#addTagModal #tagName').val('')
             }
         });
     }
@@ -73,8 +77,9 @@ const saveTag = () => {
     const [newTagName, tagId] = [$('#editTagModal #tagName').val(), $('#editTagModal #tagId').val()];
 
     if (!validateTag(newTagName)) {
-        // TODO: add alert
+        $("#edit-tag-name-error").text("Tag name does not meet requirements");
     } else {
+        $("#edit-tag-name-error").text("");
         $.ajax({
             url: '/Tag/UPDATE/',
             type: 'PUT',
@@ -86,6 +91,9 @@ const saveTag = () => {
             },
             error: () => {
                 alert('an error occured');
+            },
+            complete: () => {
+                $('#editTagModal #tagName').val('')
             }
         });
     }

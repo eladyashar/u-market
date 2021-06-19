@@ -5,6 +5,7 @@
     ViewData["Title"] = "Tags Management";
     Layout = "_Layout";
 }
+@model u_market.Models.Tag 
 <head>
     <link rel="stylesheet" href="~/css/tag.css" />
 </head>
@@ -47,7 +48,8 @@
                 </div>
                 <div class="tag-name mb-3">
                     <label for="Name" class="form-label">Tag Name</label>
-                    <input for="Name" type="text" class="form-control" id="tagName" />
+                    <input asp-for="Name" type="text" class="form-control" id="tagName" />
+                    <span asp-validation-for="Name" id="edit-tag-name-error" class="text-danger"></span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -69,7 +71,8 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="Name" class="form-label">Tag Name</label>
-                    <input for="Name" type="text" class="form-control" id="tagName" />
+                    <input asp-for="Name" type="text" class="form-control" id="tagName" />
+                    <span asp-validation-for="Name" id="add-tag-name-error" class="text-danger"></span>
                 </div>
             </div>
             <footer class="modal-footer">
