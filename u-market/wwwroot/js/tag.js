@@ -15,7 +15,7 @@ const loadAllTags = () => {
 }
 
 const validateTag = (tagName) => {
-    return true;
+    return tagName;
 } 
 
 const generateTagsTable = () => {
