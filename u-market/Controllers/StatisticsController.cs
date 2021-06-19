@@ -24,8 +24,14 @@ namespace u_market.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.bla = "me";
             return View();
+        }
+
+        public IActionResult GetAll()
+        {
+            //return Ok(Logic.GetAll());
+            return View();
+
         }
     }
 }

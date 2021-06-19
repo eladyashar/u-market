@@ -26,9 +26,9 @@ namespace u_market.Controllers.Tags
 
         [HttpGet]
         [Authorize(Roles = "Admin,Client")]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string? filter)
         {
-            return Ok(Logic.GetAll());
+            return Ok(Logic.GetAll(filter));
         }
 
         [HttpPut]
@@ -36,6 +36,14 @@ namespace u_market.Controllers.Tags
         public IActionResult Update([FromBody] Tag tag)
         {
             Logic.UpdateTag(tag);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Add([FromBody] Tag tag)
+        {
+            Logic.AddTag(tag);
             return Ok();
         }
 

@@ -1,7 +1,9 @@
 ﻿let allTags = []
-const loadAllTags = () =>
-    $.ajax({
-        url: '/Tag/GetAll/',
+let filterQuery = '';
+const loadAllTags = () => {
+    const url = filterQuery ? `/Tag/GetAll?filter=${filterQuery}` : '/Tag/GetAll';
+    return $.ajax({
+        url: url,
         type: 'GET',
         success: (data) => {
             allTags = data;
@@ -10,6 +12,11 @@ const loadAllTags = () =>
             alert('an error occured');
         }
     });
+}
+
+const validateTag = (tagName) => {
+    return tagName;
+} 
 
 const generateTagsTable = () => {
     const tableBodyElement = $('#tagsTableBody');
@@ -39,23 +46,57 @@ const openEditModal = tag => {
     editModal.modal('show');
 }
 
+
+const addTag = () => {
+    const newTagName = $('#addTagModal #tagName').val();
+    if (!validateTag(newTagName)) {
+        $("#add-tag-name-error").text("Tag name does not meet requirements");
+    } else {
+        $("#add-tag-name-error").text("");
+        $.ajax({
+            url: '/Tag/Add/',
+            type: 'Post',
+            data: JSON.stringify({ name: `${newTagName}` }),
+            contentType: "application/json; charset=utf-8",
+            success: () => {
+                $('#addTagModal').modal('hide');
+                generateTagsTable();
+            },
+            error: () => {
+                alert('an error occured');
+            },
+            complete: () => {
+                $('#addTagModal #tagName').val('')
+            }
+        });
+    }
+}
+
 const saveTag = () => {
 
     const [newTagName, tagId] = [$('#editTagModal #tagName').val(), $('#editTagModal #tagId').val()];
 
-    $.ajax({
-        url: '/Tag/UPDATE/',
-        type: 'PUT',
-        data: JSON.stringify({ id: parseInt(tagId), name: `${newTagName}`}),
-        contentType: "application/json; charset=utf-8",
-        success: () => {
-            $('#editTagModal').modal('hide');
-            generateTagsTable();
-        },
-        error: () => {
-            alert('an error occured');
-        }
-    });
+    if (!validateTag(newTagName)) {
+        $("#edit-tag-name-error").text("Tag name does not meet requirements");
+    } else {
+        $("#edit-tag-name-error").text("");
+        $.ajax({
+            url: '/Tag/UPDATE/',
+            type: 'PUT',
+            data: JSON.stringify({ id: parseInt(tagId), name: `${newTagName}` }),
+            contentType: "application/json; charset=utf-8",
+            success: () => {
+                $('#editTagModal').modal('hide');
+                generateTagsTable();
+            },
+            error: () => {
+                alert('an error occured');
+            },
+            complete: () => {
+                $('#editTagModal #tagName').val('')
+            }
+        });
+    }
 };
 
 const removeTag = tagId => {
@@ -73,4 +114,8 @@ const removeTag = tagId => {
 
 $(document).ready(() => {
     generateTagsTable();
+    $("#search-tag").on("input", _.debounce(() => {
+        filterQuery = $("#search-tag").val();
+        generateTagsTable();
+    }, 1000));
 });
