@@ -12,6 +12,7 @@ namespace u_market.Models
 
         [Column("name")]
         [Required]
+        [MinLength(1)]
         public string Name { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }

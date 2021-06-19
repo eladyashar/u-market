@@ -15,9 +15,16 @@ namespace u_market.Controllers.Tags
             this.Ctx = Ctx;
         }
 
-        public IList<Tag> GetAll()
+        public IList<Tag> GetAll(string? filter)
         {
-            return this.Ctx.Tags.OrderBy(t => t.Id).ToList();
+            var query = this.Ctx.Tags.AsQueryable();
+
+            if (filter != null)
+            {
+                query = query.Where(t => t.Name.Contains(filter));
+            }
+
+            return query.OrderBy(t => t.Id).ToList();
         }
 
         public void DeleteById(int tagId)
@@ -29,6 +36,12 @@ namespace u_market.Controllers.Tags
         public void UpdateTag(Tag tag)
         {
             this.Ctx.Tags.Update(tag);
+            this.Ctx.SaveChanges();
+        }
+
+        public void AddTag(Tag tag)
+        {
+            this.Ctx.Tags.Add(tag);
             this.Ctx.SaveChanges();
         }
     }
