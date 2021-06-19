@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
+
 }
 
 <link rel="stylesheet" href="~/css/products.css" />
@@ -28,6 +29,14 @@
             href: 'https://developers.facebook.com/docs/',
             hashtag: '#u_market',
             quote: `I am loving the product "${productName}" from u_market!!! <3`
+        });
+    }
+
+    const changeCurrency = (priceInIls, elementId) => {
+        newCurrency = $("#currency-" + elementId).val();
+        const url = "https://free.currconv.com/api/v7/convert?q=ILS_" + newCurrency + "&compact=ultra&apiKey=c832ed4009e43d98f0fb";
+        $.get(url, (data) => {
+            $("#price-" + elementId).text(priceInIls * data["ILS_" + newCurrency]);
         });
     }
 </script>
@@ -77,7 +86,14 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">@product.Store.Name shop</li>
-                        <li class="list-group-item">@product.Price$</li>
+                        <li class="list-group-item">
+                            <p id="price-@product.Id">@product.Price</p>
+                            <select id="currency-@product.Id" onchange="changeCurrency(@product.Price, '@product.Id')">
+                                <option value="ILS">ILS</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                            </select>
+                        </li>
                     </ul>
                     <div class="card-body card-bottom">
                         <i class="btn far fa-thumbs-up" onclick="openShareDialog('@product.Name')"></i>
@@ -106,3 +122,4 @@
         }
     </div>
 </section>
+
