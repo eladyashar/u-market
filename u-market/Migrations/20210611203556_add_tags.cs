@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace u_market.Migrations
 {
@@ -12,7 +11,7 @@ namespace u_market.Migrations
                 columns: table => new
                 {
                     tag_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>

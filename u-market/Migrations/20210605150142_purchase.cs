@@ -13,7 +13,7 @@ namespace u_market.Migrations
                 {
                     Username = table.Column<string>(type: "character varying(20)", nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
-                    time_stamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    time_stamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
