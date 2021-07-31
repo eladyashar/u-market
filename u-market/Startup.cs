@@ -26,7 +26,7 @@ namespace u_market
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddDbContext<MarketContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("u-market"))
+                options.UseSqlServer(Configuration.GetConnectionString("u-market"))
                 .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
             services.AddSession(options => options.IdleTimeout = TimeSpan.FromMilliseconds(200));
