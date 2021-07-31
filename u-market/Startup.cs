@@ -38,6 +38,7 @@ namespace u_market
                 {
                     options.LoginPath = "/users/login";
                 });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
