@@ -29,7 +29,7 @@
             </div>
         }
     </div>
-        <!-- Page content wrapper-->
+    <!-- Page content wrapper-->
     <div class="page-container">
         @if (User.Identity.IsAuthenticated)
         {
@@ -80,18 +80,20 @@
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
             <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-            <script>
-                window.fbAsyncInit = function () {
-                    FB.init({
-                        appId: '181768927205442',
-                        autoLogAppEvents: true,
-                        xfbml: true,
-                        version: 'v1.0'
-                    });
-                };
-            </script>
-            <!-- CSS only -->
-            <script src="~/js/site.js" asp-append-version="true"></script>
-            @RenderSection("Scripts", required: false)
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCN52mrQDyBgchOudoY2G0rJaLumvvb6gk&libraries=places"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '181768927205442',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v1.0'
+            });
+        };
+    </script>
+    <!-- CSS only -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
@@ -66,6 +65,7 @@ namespace u_market.Controllers
             {
                 new Claim("Username", user.Username),
                 new Claim("FirstName", user.FirstName),
+                new Claim("LastName", user.LastName),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString())
             };
 
