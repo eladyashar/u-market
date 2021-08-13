@@ -15,11 +15,11 @@
     </h1>
     <section class="input-group">
         <label>Filter By:</label>
-        <select class="form-control store" name="store">
+        <select class="form-control storeId" name="storeId">
             <option value="" disabled selected>Select a store</option>
             @foreach (var store in ViewBag.Stores.Value)
             {
-                <option name=@store.Name value=@store.Id>@store.Name</option>
+                <option value=@store.Id>@store.Name</option>
             }
         </select>
         <select class="form-control productName" name="productName">
@@ -58,6 +58,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">user name</th>
+                    <th scope="col">store</th>
                     <th scope="col">product name</th>
                     <th scope="col">price</th>
                     <th scope="col">purchase date</th>
@@ -66,12 +67,13 @@
             <tbody>
                 @foreach (var Purchase in @ViewBag.Purchases.Value)
                 {
-                    <tr>
-                        <td>@Purchase.Username</td>
-                        <td>@Purchase.Product.Name</td>
-                        <td>@Purchase.Product.Price</td>
-                        <td>@Purchase.PurchaseDate</td>
-                    </tr>
+                <tr>
+                    <td>@Purchase.Username</td>
+                    <td>@Purchase.Product.Store.Name</td>
+                    <td>@Purchase.Product.Name</td>
+                    <td>@Purchase.Product.Price</td>
+                    <td>@Purchase.PurchaseDate</td>
+                </tr>
                 }
             </tbody>
         </table>

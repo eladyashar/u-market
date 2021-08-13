@@ -19,9 +19,10 @@ namespace u_market.Controllers.Purchases
             Logic = new PurchaseLogic(Ctx);
         }
 
-        public IActionResult Index([FromQuery(Name = "productName")] int? productId, [FromQuery(Name = "tag")] int? tag, [FromQuery(Name = "date")] string? date)
+        public IActionResult Index([FromQuery(Name = "productName")] int? productId, [FromQuery(Name = "tag")] int? tag,
+                                   [FromQuery(Name = "date")] string? date, [FromQuery(Name = "storeId")] int? storeId)
         {
-            ViewBag.Purchases = GetAll(productId, tag, date);
+            ViewBag.Purchases = GetAll(productId, tag, date, storeId);
             ViewBag.PurchasesDates = GetPurchasesDates();
             ViewBag.Stores = GetAllStores();
             ViewBag.Products = GetProducts();
@@ -31,9 +32,9 @@ namespace u_market.Controllers.Purchases
 
         [HttpGet]
         [Authorize(Roles = "Admin,Client")]
-        public IActionResult GetAll(int? productId, int? tag, string? date)
+        public IActionResult GetAll(int? productId, int? tag, string? date, int? storeId)
         {
-            return Ok(Logic.GetAll(productId, tag, date));
+            return Ok(Logic.GetAll(productId, tag, date, storeId));
         }
 
         [HttpGet]

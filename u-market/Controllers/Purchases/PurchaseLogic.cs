@@ -16,7 +16,7 @@ namespace u_market.Controllers.Purchases
             this.Ctx = Ctx;
         }
 
-        public IList<Purchase> GetAll(int? productId, int? tag, string? date)
+        public IList<Purchase> GetAll(int? productId, int? tag, string? date, int? storeId)
         {
             IQueryable<Purchase> purchases = this.Ctx.Purchases.Include(c => c.Product);
             //IQueryable<Purchase> purchases = this.Ctx.Purchases.Include(c => c.Product).Include(p => p.User);
@@ -34,6 +34,11 @@ namespace u_market.Controllers.Purchases
             if (date != null)
             {
                 purchases = purchases.Where(p => p.PurchaseDate.ToString().Contains(date));
+            }
+
+            if (storeId != null)
+            {
+                purchases = purchases.Where(p => p.Product.Store.Id == storeId);
             }
 
             //return purchases.Include(c => c.Product).Include(p => p.User).OrderBy(p => p.ProductId).ToList();

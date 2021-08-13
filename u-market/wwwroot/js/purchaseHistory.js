@@ -9,8 +9,7 @@
         });
     }
 
-    const filterTypes = ["productName", "tag", "date"];
-    //const filterTypes = ["productName", "price", "tag"];
+    const filterTypes = ["productName", "tag", "date", "storeId"];
     filterTypes.map(type => {
         $(`select.${type}`).change(function () {
             const seletedType = $(this).children("option:selected").val();
