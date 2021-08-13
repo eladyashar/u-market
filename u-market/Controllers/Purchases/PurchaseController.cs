@@ -8,8 +8,6 @@ using u_market.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace u_market.Controllers.Purchases
 {
     public class PurchaseController : Controller
@@ -21,19 +19,51 @@ namespace u_market.Controllers.Purchases
             Logic = new PurchaseLogic(Ctx);
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery(Name = "productName")] int? productId, [FromQuery(Name = "tag")] int? tag, [FromQuery(Name = "date")] string? date)
         {
-            @ViewBag.Data = GetAll("");
-            @ViewBag.Purchases = @ViewBag.Data.Value;
+            ViewBag.Purchases = GetAll(productId, tag, date);
+            ViewBag.PurchasesDates = GetPurchasesDates();
+            ViewBag.Stores = GetAllStores();
+            ViewBag.Products = GetProducts();
+            ViewBag.Tags = GetTags();
             return View();
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin,Client")]
-        public IActionResult GetAll(string? filter)
+        public IActionResult GetAll(int? productId, int? tag, string? date)
         {
-            return Ok(Logic.GetAll(filter));
+            return Ok(Logic.GetAll(productId, tag, date));
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Client")]
+        public IActionResult GetAllStores()
+        {
+            return Ok(Logic.GetAllStores());
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Client")]
+        public IActionResult GetProducts()
+        {
+            return Ok(Logic.GetProducts());
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Client")]
+        public IActionResult GetTags()
+        {
+            return Ok(Logic.GetTags());
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Client")]
+        public IActionResult GetPurchasesDates()
+        {
+            return Ok(Logic.GetPurchasesDates());
+        }
+
 
     }
 }

@@ -3,7 +3,9 @@
     ViewData["Title"] = "Purchase History";
     Layout = "_Layout";
 }
-@model u_market.Models.Purchase
+@*@model u_market.Models.Purchase*@
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/purchaseHistory.js"></script>
 <head>
     <link rel="stylesheet" href="~/css/purchase.css" />
 </head>
@@ -11,7 +13,47 @@
     <h1>
         purchase history
     </h1>
+    <section class="input-group">
+        <label>Filter By:</label>
+        <select class="form-control store" name="store">
+            <option value="" disabled selected>Select a store</option>
+            @foreach (var store in ViewBag.Stores.Value)
+            {
+                <option name=@store.Name value=@store.Id>@store.Name</option>
+            }
+        </select>
+        <select class="form-control productName" name="productName">
+            <option value="" disabled selected>Select a product name</option>
+            @foreach (var product in ViewBag.Products.Value)
+            {
+                <option value=@product.Id>@product.Name</option>
+            }
+        </select>
+        <select class="form-control tag" name="tag">
+            <option value="" disabled selected>Select a tag</option>
+            @foreach (var tag in ViewBag.Tags.Value)
+            {
+                <option value=@tag.Id>@tag.Name</option>
+            }
+        </select>
+        <select class="form-control date" name="date">
+            <option value="" disabled selected>Select a date</option>
+            @foreach (var date in ViewBag.PurchasesDates.Value)
+            {
+                <option value=@date>@date</option>
+            }
+        </select>
+        <button id="clear-btn" class="btn btn-danger">
+            clear all
+        </button>
+    </section>
     <div class="purchase-table-container">
+        @if (ViewBag.Purchases.Value.Count == 0)
+        {
+        <h3>No purchase found, try to filter by different proporties</h3>
+        }
+        else
+        {
         <table class="table table-dark table-striped table-hover purchase-table">
             <thead class="thead-dark">
                 <tr>
@@ -22,24 +64,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var Purchase in @ViewBag.Purchases)
+                @foreach (var Purchase in @ViewBag.Purchases.Value)
                 {
                     <tr>
                         <td>@Purchase.Username</td>
-                            <td>@Purchase.Product.Name</td>
-                            <td>@Purchase.Product.Price</td>
-                            <td>@Purchase.PurchaseDate</td>
+                        <td>@Purchase.Product.Name</td>
+                        <td>@Purchase.Product.Price</td>
+                        <td>@Purchase.PurchaseDate</td>
                     </tr>
                 }
             </tbody>
         </table>
+        }
+
     </div>
 </body>
-
-
-
-@*@section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/lib/lodash/lodash.min.js"></script>
-        <script src="~/js/tag.js"></script>
-    }*@
