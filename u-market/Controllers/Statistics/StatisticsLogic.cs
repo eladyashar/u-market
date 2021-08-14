@@ -29,9 +29,5 @@ namespace u_market.Controllers.Statistics
                                                             .AsEnumerable().GroupBy(p => p.productName).ToDictionary(x => x.Key, x => x.Count());
         }
 
-        //public User FindUser(string username)
-        //{
-        //    return Ctx.Users.SingleOrDefault(user => user.Username == username);
-        //}
     }
 }
