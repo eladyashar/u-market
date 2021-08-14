@@ -14,9 +14,11 @@ const generateStoresTable = async () => {
 
     await loadAllStores();
 
-    allStores.forEach(async (store, storeIndex) => {
-        await generateStoreDetailsRow(store, storeIndex);
-    });
+    if (allStores) {
+        allStores.forEach(async (store, storeIndex) => {
+            await generateStoreDetailsRow(store, storeIndex);
+        });
+    }
 
     const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
     const addStroeCol = addStoreRow.append('<td colspan="100%" class="add-store-row" onclick="openAddStoreModal()">').children('td:last');
@@ -61,13 +63,15 @@ const getAddress = async (lat, lng) => {
 const openEditStoreModal = async storeIndex => {
     const store = allStores[storeIndex];
     const editModal = $('#storeModal');
+    editModal.find('#store-modal-title').text('Edit Store');
     const storeAddress = await getAddress(store.lat, store.lang);
 
-    editModal.find('#storeName').attr('placeholder', store.name);
+    editModal.find('#storeName').attr('value', store.name);
     editModal.find('#ownerLabel').show();
     editModal.find('#owner').show();
     editModal.find('#owner').attr('placeholder', `${store.owner.firstName} ${store.owner.lastName}`);
-    editModal.find('#address').attr('placeholder', storeAddress);
+    editModal.find('#address').attr('value', storeAddress);
+    editModal.find('.error').text('');
 
     editModal.find('#submit').attr('onclick', `saveStore(${storeIndex})`)
     editModal.modal('show');
@@ -75,11 +79,14 @@ const openEditStoreModal = async storeIndex => {
 
 const openAddStoreModal = () => {
     const addModal = $('#storeModal');
-
+    addModal.find('#store-modal-title').text('Add Store');
+    addModal.find('#storeName').val('');
     addModal.find('#storeName').attr('placeholder', 'Store Name...');
     addModal.find('#ownerLabel').hide();
     addModal.find('#owner').hide();
+    addModal.find('#address').val('');
     addModal.find('#address').attr('placeholder', 'Address...');
+    addModal.find('.error').text('');
 
     addModal.find('#submit').attr('onclick', 'saveStore()')
     addModal.modal('show');
@@ -90,9 +97,26 @@ const saveStore = async storeIndex => {
 
     const [storeNameValue, addressValue] = [$('#storeModal #storeName').val(), $('#storeModal #address').val()];
 
+    if (!storeNameValue) {
+        $(".error").text('Store name cannot be empty');
+        return;
+    }
+
+    if (!addressValue) {
+        $(".error").text('Address cannot be empty');
+        return;
+    }
+
     store.name = storeNameValue ? storeNameValue : store.name;
     store.owner = isNaN(storeIndex) ? null : store.owner;
-    [store.lat, store.lang] = addressValue ? Object.values(await getLatLng(addressValue)) : [store.lat, store.lang];
+
+    try {
+        [store.lat, store.lang] = addressValue ? Object.values(await getLatLng(addressValue)) : [store.lat, store.lang];
+    } catch (error) {
+        $(".error").text('Invalid address')
+
+        return;
+    }
 
     try {
         await (isNaN ? addStore(store) : updateStore(store));
@@ -100,7 +124,7 @@ const saveStore = async storeIndex => {
         generateStoresTable();
     }
     catch (error) {
-        alert(error);
+        alert(error.responseText);
     }
 };
 
