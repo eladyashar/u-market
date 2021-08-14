@@ -8,8 +8,18 @@
 <link rel="stylesheet" href="~/css/products.css" />
 <link rel="stylesheet" href="~/css/store.css" />
 
-<div class="header">
-    <h1>store managment</h1>
+<div class="header row">
+    <h1 class="col-8">store managment</h1>
+    @if (User.IsInRole("Admin"))
+    {<div class="col-4">
+            <div class="row">
+                <i class="fas fa-map-marked"></i>
+                <span class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="map-switch">
+                </span>
+                <i class="fas fa-table"></i>
+            </div>
+        </div>}
 </div>
 
 <div class="products-table-container">
@@ -33,6 +43,10 @@
     </table>
 </div>
 
+<div id="map-container">
+    
+</div>
+
 <!-- Modal-->
 <div class="modal fade" id="storeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -47,7 +61,7 @@
                     <input type="text" class="form-control" id="storeName" />
                 </div>
                 <div class="mb-3">
-                    <label id ="ownerLabel" for="owner" class="form-label">Owner Name</label>
+                    <label id="ownerLabel" for="owner" class="form-label">Owner Name</label>
                     <input type="text" disabled class="form-control" id="owner" />
                 </div>
                 <div class="mb-3">
@@ -55,8 +69,8 @@
                     <input type="text" class="form-control address-input" id="address" />
                 </div>
             </div>
+            <label class="error"></label>
             <div class="modal-footer">
-                <label class="error"></label>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
                 <button id="submit" type="button" class="btn btn-primary">Save</button>
             </div>

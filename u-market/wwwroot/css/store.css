@@ -13,6 +13,11 @@
     overflow-y: auto;
 }
 
+#map-container {
+    width: 75%;
+    height: 80%;
+}
+
 .products-table-container {
     display: flex;
     flex-direction: row;
@@ -66,4 +71,6 @@
 
 .error {
     color: red;
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
 }

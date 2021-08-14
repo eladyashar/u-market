@@ -1,8 +1,32 @@
 ﻿let allStores = [];
+let map;
+
+const initMap = () => {
+    map = new google.maps.Map(document.getElementById("map-container"), {
+        zoom: 13,
+        center: { lat: 32.078526836006596, lng: 34.80609995107827},
+    });
+}
+
 
 $(document).ready(() => {
+    $('#map-container').hide();
     $('.address-input').toArray().forEach(addressInput => {
         new google.maps.places.Autocomplete(addressInput);
+    });
+
+    let isMap = false;
+
+    $('#map-switch').click(() => {
+        if (!isMap) {
+            $('.products-table-container').hide();
+            $('#map-container').show();
+        } else {
+            $('#map-container').hide();
+            $('.products-table-container').show();
+        }
+
+        isMap = !isMap;
     });
 
     generateStoresTable();
@@ -10,6 +34,7 @@ $(document).ready(() => {
 
 const generateStoresTable = async () => {
     const tableBodyElement = $('#storesTableBody');
+    initMap();
     tableBodyElement.empty();
 
     await loadAllStores();
@@ -17,6 +42,16 @@ const generateStoresTable = async () => {
     if (allStores) {
         allStores.forEach(async (store, storeIndex) => {
             await generateStoreDetailsRow(store, storeIndex);
+            const marker = new google.maps.Marker({
+                position: { lat: store.lat, lng: store.lang },
+                map,
+                title: store.name,
+            });
+
+            marker.addListener('mouseover', function () {
+                infoWindow.setContent(`<p>${store.name}</p>`);
+                infowindow.open(map, this);
+            });
         });
     }
 
