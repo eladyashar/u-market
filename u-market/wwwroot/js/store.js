@@ -27,14 +27,14 @@ $(document).ready(() => {
         }
 
         isMap = !isMap;
-    })
+    });
 
-    initMap();
     generateStoresTable();
 });
 
 const generateStoresTable = async () => {
     const tableBodyElement = $('#storesTableBody');
+    initMap();
     tableBodyElement.empty();
 
     await loadAllStores();
