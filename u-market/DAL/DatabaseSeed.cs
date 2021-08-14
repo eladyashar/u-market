@@ -18,6 +18,14 @@ namespace u_market.DAL
             {
                 initStores(context);
             }
+            if (!context.Tags.Any())
+            {
+                initTags(context);
+            }
+            if (!context.Products.Any())
+            {
+                initProducts(context);
+            }
         }
 
         private static void initUsers(MarketContext context)
@@ -62,6 +70,36 @@ namespace u_market.DAL
             };
 
             context.Add(store);
+            context.SaveChanges();
+        }
+        private static void initTags(MarketContext context)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                context.Add(new Tag()
+                {
+                    Name = "tag" + i.ToString()
+                });
+            }
+
+            context.SaveChanges();
+        }
+        private static void initProducts(MarketContext context)
+        {
+
+            for (int i = 0; i < 5; i++)
+            {
+                context.Add(new Product()
+                {
+                    Name = "product" + i.ToString(),
+                    Description = "product" + i.ToString(),
+                    ImageUrl = null,
+                    Price = i,
+                    StoreId = 1,
+                    //Tags = { new Tag() { Id = i }, new Tag() { Id = (i + 1) % 5 } }
+                });
+            }
+
             context.SaveChanges();
         }
     }
