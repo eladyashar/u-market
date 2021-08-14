@@ -28,6 +28,11 @@ namespace u_market.Controllers.Stores
             return Ctx.Stores.SingleOrDefault(store => store.Id == storeId);
         }
 
+        public Store FindMyStore(String userId) 
+        {
+            return Ctx.Stores.Where(s => s.OwnerId.Equals(userId)).Include(store => store.Owner).Include(store => store.Products).FirstOrDefault();
+        }
+
         public void Insert(Store store, ClaimsPrincipal user)
         {
             store.OwnerId = user.Claims.Single(c => c.Type.Equals("Username")).Value;

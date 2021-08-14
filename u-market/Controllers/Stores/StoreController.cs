@@ -30,15 +30,25 @@ namespace u_market.Controllers.Stores
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(StoreLogic.GetAll());
+            if (User.IsInRole("Admin"))
+            {
+                return Ok(StoreLogic.GetAll());
+            }
+
+            return Ok(new []{ StoreLogic.FindMyStore(User.Claims.Single(c => c.Type.Equals("Username")).Value) });
         }
 
         [HttpPost]
         public IActionResult Insert([FromBody] Store store)
         {
-            StoreLogic.Insert(store, User);
+            if (StoreLogic.FindMyStore(User.Claims.Single(c => c.Type.Equals("Username")).Value) == null)
+            {
+                StoreLogic.Insert(store, User);
 
-            return Ok();
+                return Ok();
+            }
+
+            return BadRequest("User owns a store");
         }
 
         [HttpPut]
