@@ -25,7 +25,7 @@ namespace u_market.Controllers.Stores
 
         public Store FindStore(int storeId)
         {
-            return Ctx.Stores.SingleOrDefault(store => store.Id == storeId);
+            return Ctx.Stores.Include(s => s.Products).SingleOrDefault(store => store.Id == storeId);
         }
 
         public Store FindMyStore(String userId) 
