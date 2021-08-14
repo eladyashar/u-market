@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using u_market.DAL;
 
 namespace u_market.Migrations
@@ -14,8 +15,8 @@ namespace u_market.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.5")
-                .HasAnnotation("SqlServer:Identity", "1, 1");
+                .HasAnnotation("SqlServer:Identity", "1, 1")
+                .HasAnnotation("ProductVersion", "5.0.5");
 
             modelBuilder.Entity("product_tags", b =>
                 {
@@ -127,7 +128,7 @@ namespace u_market.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("tag_id")
-                        .HasAnnotation("SqlServer: Identity", "1, 1");
+                        .HasAnnotation("SqlServer:Identity", "1, 1");
 
                     b.Property<string>("Name")
                         .IsRequired()
