@@ -1,0 +1,63 @@
+﻿#register-container {
+    display: flex;
+    align-items: center;
+    width: 800px;
+    border: 2px solid gray;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+}
+
+#register-form {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+}
+
+.form-control {
+    width: 200px;
+}
+
+.form-group {
+    width: 200px;
+    margin-bottom: 5px;
+}
+
+.btn-primary {
+    margin-top: 30px
+}
+
+.btn-primary {
+    margin-top: 30px
+}
+
+#login {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#icon-and-sentence {
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.far {
+    margin-left: 100px;
+}
+
+
+/*.purchase-table {
+    margin-top: 20px;
+}
+
+.purchase-table-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 75%;
+    margin: auto;
+    height: 80%;
+    overflow-y: scroll;
+}*/
