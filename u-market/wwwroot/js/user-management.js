@@ -1,8 +1,11 @@
 ﻿let allUsers = [];
+let filterQuery = '';
 
-const loadAllUsers = () =>
-    $.ajax({
-        url: '/UsersManagement/GetAll/',
+const loadAllUsers = () => {
+    const url = filterQuery ? `/UsersManagement/GetAll?query=${filterQuery}` : '/UsersManagement/GetAll/';
+
+    return $.ajax({
+        url: url,
         type: 'GET',
         success: (data) => {
             allUsers = data;
@@ -11,6 +14,7 @@ const loadAllUsers = () =>
             alert('an error occured');
         }
     });
+}
 
 const generateUsersTable = () => {
     const tableBodyElement = $('#usersTableBody');
@@ -86,5 +90,10 @@ const saveUser = userIndex => {
 };
 
 $(document).ready(() => {
+    $("#search").on("input", _.debounce(() => {
+        filterQuery = $("#search").val();
+        generateUsersTable();
+    }, 1000));
+
     generateUsersTable();
 });
