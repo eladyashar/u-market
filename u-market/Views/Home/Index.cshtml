@@ -4,6 +4,7 @@
 
 }
 <script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/lodash/lodash.min.js"></script>
 <script src="~/js/product.js"></script>
 <link rel="stylesheet" href="~/css/products.css" />
 <script>
@@ -40,6 +41,7 @@
         });
     }
 </script>
+<input type="text" placeholder="Search anything" id="search" />
 <section class="input-group">
     <label>Filter By:</label>
     <select class="form-control store" name="store">
@@ -87,12 +89,12 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">@product.Store.Name shop</li>
                         <li class="price-line list-group-item">
-                                <div id="price-@product.Id">@product.Price</div>
-                                <select id="currency-@product.Id" onchange="changeCurrency(@product.Price, '@product.Id')">
-                                    <option value="ILS">ILS</option>
-                                    <option value="USD">USD</option>
-                                    <option value="EUR">EUR</option>
-                                </select>
+                            <div id="price-@product.Id">@product.Price</div>
+                            <select id="currency-@product.Id" onchange="changeCurrency(@product.Price, '@product.Id')">
+                                <option value="ILS">ILS</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                            </select>
                         </li>
                     </ul>
                     <div class="card-body card-bottom">
