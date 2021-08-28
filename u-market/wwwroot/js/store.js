@@ -105,11 +105,11 @@ const openEditStoreModal = async storeIndex => {
     const editModal = $('#storeModal');
     editModal.find('#store-modal-title').text('Edit Store');
 
-    editModal.find('#storeName').attr('value', store.name);
+    editModal.find('#storeName').val(store.name);
     editModal.find('#ownerLabel').show();
     editModal.find('#owner').show();
     editModal.find('#owner').attr('placeholder', `${store.owner.firstName} ${store.owner.lastName}`);
-    editModal.find('#address').attr('value', store.address);
+    editModal.find('#address').val(store.address);
     editModal.find('.error').text('');
 
     editModal.find('#submit').attr('onclick', `saveStore(${storeIndex})`)
