@@ -16,3 +16,10 @@
     height: 80%;
     overflow-y: scroll;
 }
+
+.input-group label {
+    padding: 5px;
+}
+.input-group {
+    margin-top: 5px;
+}

@@ -22,17 +22,22 @@ const generateTagsTable = () => {
     const tableBodyElement = $('#tagsTableBody');
     tableBodyElement.empty();
     loadAllTags().then(() => {
-        allTags.forEach((tag) => {
+        if (allTags != false) {
+            allTags.forEach((tag) => {
+                const row = tableBodyElement.append('<tr>').children('tr:last');
+                row.append(`<td>${tag.id}</td>`)
+                    .append(`<td>${tag.name}</td>`);
+
+                const editCol = row.append('<td>').children('td:last');
+                editCol.append(`<i class='fa fa-pen' onclick="openEditModal({tagName:'${tag.name}', tagId: ${tag.id}})"></i>`);
+
+                const deleteCol = row.append('<td>').children('td:last');
+                deleteCol.append(`<i class='fa fa-trash' onclick="removeTag('${tag.id}')"></i>`)
+            })
+        } else {
             const row = tableBodyElement.append('<tr>').children('tr:last');
-            row.append(`<td>${tag.id}</td>`)
-                .append(`<td>${tag.name}</td>`)
-
-            const editCol = row.append('<td>').children('td:last');
-            editCol.append(`<i class='fa fa-pen' onclick="openEditModal({tagName:'${tag.name}', tagId: ${tag.id}})"></i>`);
-
-            const deleteCol = row.append('<td>').children('td:last');
-            deleteCol.append(`<i class='fa fa-trash' onclick="removeTag('${tag.id}')"></i>`)
-        })
+            row.append(`<td colspan="100%">Nothing was found</td>`);
+        }
     });
 };
 

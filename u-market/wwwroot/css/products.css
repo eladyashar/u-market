@@ -29,3 +29,11 @@
     display: flex; 
     justify-content: space-between;
 }
+
+.input-group {
+    margin-top: 5px;
+}
+
+.input-group label {
+    padding: 5px;
+}

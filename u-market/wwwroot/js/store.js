@@ -1,5 +1,6 @@
 ﻿let allStores = [];
 let map;
+let filterQuery = '';
 
 const initMap = () => {
     map = new google.maps.Map(document.getElementById("map-container"), {
@@ -29,6 +30,11 @@ $(document).ready(() => {
         isMap = !isMap;
     });
 
+    $("#search").on("input", _.debounce(() => {
+        filterQuery = $("#search").val();
+        generateStoresTable();
+    }, 1000));
+
     generateStoresTable();
 });
 
@@ -39,9 +45,9 @@ const generateStoresTable = async () => {
 
     await loadAllStores();
 
-    if (allStores) {
+    if (allStores != false) {
         allStores.forEach(async (store, storeIndex) => {
-            await generateStoreDetailsRow(store, storeIndex);
+            generateStoreDetailsRow(store, storeIndex);
             const marker = new google.maps.Marker({
                 position: { lat: store.lat, lng: store.lang },
                 map,
@@ -53,6 +59,8 @@ const generateStoresTable = async () => {
                 infowindow.open(map, this);
             });
         });
+    } else {
+        tableBodyElement.append('<tr>').children('tr:last').append("<td colspan='100%'>Nothing was found</td>")
     }
 
     const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
@@ -61,19 +69,18 @@ const generateStoresTable = async () => {
 };
 
 const loadAllStores = async () => {
+    const url = filterQuery ? `/Store/GetAll?query=${filterQuery}` : '/Store/GetAll';
     allStores = await $.ajax({
-        url: '/Store/GetAll/',
+        url: url,
         type: 'GET'
     });
 };
 
-const generateStoreDetailsRow = async (store, storeIndex) => {
-    const storeAddress = await getAddress(store.lat, store.lang);
-
+const generateStoreDetailsRow = (store, storeIndex) => {
     const detailsRow = $('#storesTableBody').prepend('<tr>').children('tr:first');
     detailsRow.append(`<td>${store.name}</td>`)
         .append(`<td>${store.owner.firstName} ${store.owner.lastName}</td>`)
-        .append(`<td>${storeAddress}</td>`);
+        .append(`<td>${store.address}</td>`);
 
     const editCol = detailsRow.append('<td>').children('td:last');
     editCol.append(`<i class='fa fa-pen' onclick="openEditStoreModal(${storeIndex})"></i>`);
@@ -99,13 +106,12 @@ const openEditStoreModal = async storeIndex => {
     const store = allStores[storeIndex];
     const editModal = $('#storeModal');
     editModal.find('#store-modal-title').text('Edit Store');
-    const storeAddress = await getAddress(store.lat, store.lang);
 
-    editModal.find('#storeName').attr('value', store.name);
+    editModal.find('#storeName').val(store.name);
     editModal.find('#ownerLabel').show();
     editModal.find('#owner').show();
     editModal.find('#owner').attr('placeholder', `${store.owner.firstName} ${store.owner.lastName}`);
-    editModal.find('#address').attr('value', storeAddress);
+    editModal.find('#address').val(store.address);
     editModal.find('.error').text('');
 
     editModal.find('#submit').attr('onclick', `saveStore(${storeIndex})`)
@@ -144,6 +150,7 @@ const saveStore = async storeIndex => {
 
     store.name = storeNameValue ? storeNameValue : store.name;
     store.owner = isNaN(storeIndex) ? null : store.owner;
+    store.address = addressValue ? addressValue : store.address;
 
     try {
         [store.lat, store.lang] = addressValue ? Object.values(await getLatLng(addressValue)) : [store.lat, store.lang];

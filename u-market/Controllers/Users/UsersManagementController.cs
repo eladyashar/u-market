@@ -21,9 +21,9 @@ namespace u_market.Controllers.Users
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery(Name = "query")]string? query)
         {
-            return Ok(Logic.GetAll());
+            return Ok(Logic.GetAll(query));
         }
 
         [HttpPut]

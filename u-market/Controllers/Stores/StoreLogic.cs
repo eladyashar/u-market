@@ -18,9 +18,16 @@ namespace u_market.Controllers.Stores
             Ctx = ctx;
         }
 
-        public IEnumerable<Store> GetAll()
+        public IEnumerable<Store> GetAll(string? query)
         {
-            return Ctx.Stores.Include(store => store.Owner).Include(store => store.Products).ToList();
+            IQueryable<Store> stores = Ctx.Stores.Include(store => store.Owner).Include(store => store.Products);
+
+            if (query != null)
+            {
+                stores = stores.Where(store => store.Name.Contains(query) || store.Owner.FirstName.Contains(query) || store.Owner.LastName.Contains(query));
+            }
+
+            return stores.ToList();
         }
 
         public Store FindStore(int storeId)
