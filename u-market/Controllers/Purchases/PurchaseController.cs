@@ -64,8 +64,6 @@ namespace u_market.Controllers.Purchases
         {
             return Ok(Logic.GetPurchasesDates());
         }
-
-
     }
 }
  
