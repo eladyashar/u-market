@@ -154,7 +154,7 @@ const saveStore = async storeIndex => {
     }
 
     try {
-        await (isNaN ? addStore(store) : updateStore(store));
+        await (isNaN(storeIndex) ? addStore(store) : updateStore(store));
         closeStoreModal();
         generateStoresTable();
     }
