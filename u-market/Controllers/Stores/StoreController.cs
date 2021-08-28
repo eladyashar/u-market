@@ -28,11 +28,11 @@ namespace u_market.Controllers.Stores
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string? query)
         {
             if (User.IsInRole("Admin"))
             {
-                return Ok(StoreLogic.GetAll());
+                return Ok(StoreLogic.GetAll(query));
             }
 
             return Ok(new []{ StoreLogic.FindMyStore(User.Claims.Single(c => c.Type.Equals("Username")).Value) });
