@@ -31,9 +31,14 @@ namespace u_market.Controllers.Statistics
             return View();
         }
 
-        public IActionResult GetAll()
+        public IActionResult GetPurchasesByProduct()
         {
-            return Json(JsonConvert.SerializeObject(Logic.GetAll()));
+            return Json(JsonConvert.SerializeObject(Logic.getPurchasesByProduct()));
+        }
+
+        public IActionResult GetPurchasesByStore()
+        {
+            return Json(JsonConvert.SerializeObject(Logic.getPurchasesByStore()));
         }
 
     }
