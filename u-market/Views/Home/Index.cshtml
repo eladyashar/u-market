@@ -78,7 +78,7 @@
         {
             <div class="card-container">
                 <div class="card">
-                    <img src=@(product.ImageUrl!=null ? @product.ImageUrl : "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png")
+                    <img src=@(product.ImageUrl==null || product.ImageUrl.Equals("") ? "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png":@product.ImageUrl )
                          class="card-img-top image-container" alt="">
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
