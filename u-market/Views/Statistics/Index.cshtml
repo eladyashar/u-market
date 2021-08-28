@@ -1,8 +1,18 @@
 ﻿<link rel="stylesheet" href="~/css/statistics.css" />
 
 <h1>Statistics</h1>
+<h6>choose which purchases statistics to watch</h6>
+<select id="graphDataType">
+    <option name="store" value="store">purchases by store</option>
+    <option name="product" value="product">purchases by product</option>
+</select>
+<div class="form-check form-switch">
+    <label class="form-check-label" for="changeGraph">change graph view</label>
+    <input class="form-check-input" type="checkbox" id="changeGraph">
+</div>
 <div id="productAmountGraphContainer"></div>
-
+<div id="productAmountPieContainer"></div>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="https://d3js.org/d3.v6.js"></script>
+<script src="~/js/getColor.js"></script>
 <script src="~/js/statistics.js"></script>

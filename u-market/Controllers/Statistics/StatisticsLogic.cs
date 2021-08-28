@@ -17,7 +17,7 @@ namespace u_market.Controllers.Statistics
             Ctx = ctx;
         }
 
-        public IDictionary<string, int> GetAll()
+        public IDictionary<string, int> getPurchasesByProduct()
         {
             return Ctx.Purchases.Join(Ctx.Products,
                                         purchase => purchase.ProductId,
@@ -27,6 +27,23 @@ namespace u_market.Controllers.Statistics
                                                                   productName = product.Name
                                                                 })
                                                             .AsEnumerable().GroupBy(p => p.productName).ToDictionary(x => x.Key, x => x.Count());
+        }
+
+        public IDictionary<string, int> getPurchasesByStore()
+        {
+
+            return Ctx.Products.Join(Ctx.Purchases,
+                                        product => product.Id,
+                                        purchase => purchase.ProductId,
+                                            (product,purchase) => new
+                                            {
+                                                storeId = product.StoreId
+                                            }).Join(Ctx.Stores,
+                                                        product => product.storeId,
+                                                        store => store.Id, (product, store) => new
+                                                        {
+                                                            storeName = store.Name
+                                                        }).AsEnumerable().GroupBy(s => s.storeName).ToDictionary(x => x.Key, x => x.Count());
         }
 
     }

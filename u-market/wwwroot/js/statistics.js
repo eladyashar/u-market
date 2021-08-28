@@ -3,80 +3,42 @@ const height = 600;
 const margin = { 'top': 20, 'right': 20, 'bottom': 100, 'left': 100 };
 const graphWidth = width - margin.left - margin.right;
 const graphHeight = height - margin.top - margin.bottom;
-const colors = [
-    "#FF0000",
-    "#FF1100",
-    "#FF2200",
-    "#FF3300",
-    "#FF4400",
-    "#FF5500",
-    "#FF6600",
-    "#FF7700",
-    "#FF8800",
-    "#FF9900",
-    "#FFAA00",
-    "#FFBB00",
-    "#FFCC00",
-    "#FFDD00",
-    "#FFEE00",
-    "#FFFF00",
-    "#EEFF00",
-    "#DDFF00",
-    "#CCFF00",
-    "#BBFF00",
-    "#AAFF00",
-    "#99FF00",
-    "#88FF00",
-    "#77FF00",
-    "#66FF00",
-    "#55FF00",
-    "#44FF00",
-    "#33FF00",
-    "#22FF00",
-    "#11FF00",
-    "#00FF00"
-]
 
-const svg = d3.select('#productAmountGraphContainer')
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height);
-
-const graph = svg.append('g')
-    .attr('width', graphWidth)
-    .attr('height', graphHeight)
-    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-const gXAxis = graph.append('g')
-    .attr('transform', `translate(0, ${graphHeight})`);
-
-const gYAxis = graph.append('g')
-
-const getColor = (maxAmount, amount) => {
-    const colorIndex = Math.trunc(amount / (maxAmount / (colors.length - 1)))
-    return colors[colorIndex];
-}
-
-const getData = async () => {
-    return $.get("/Statistics/GetAll", (data, status) => {
-        if (status != "success") {
-            alert("error ocured while trying to get the statistics");
-        }
-    });
-};
-
-getData().then((result) => {
-    let jsonData = JSON.parse(result);
-    let data = [];
-    for (o in jsonData) {
-        const obj = {
-            product: "",
-            Amount: 0
-        }
-        obj.product = o;
-        obj.Amount = jsonData[o];
-        data.push(obj);
+let currGraph = "productAmountGraphContainer";
+$("#changeGraph").change(() => {
+    if (currGraph == "productAmountGraphContainer") {
+        document.getElementById("productAmountGraphContainer").hidden = true;
+        document.getElementById("productAmountPieContainer").hidden = false;
+        currGraph = "productAmountPieContainer";
+    } else {
+        document.getElementById("productAmountGraphContainer").hidden = false;
+        document.getElementById("productAmountPieContainer").hidden = true;
+        currGraph = "productAmountGraphContainer";
     }
+})
+
+$("#graphDataType").change(() => {
+    drawGraph($("#graphDataType").val());
+});
+
+
+const drawBarGraph = (data) => {
+    d3.select("#productAmountGraphContainer").select("svg").remove();
+
+    const svg = d3.select('#productAmountGraphContainer')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+
+    const graph = svg.append('g')
+        .attr('width', graphWidth)
+        .attr('height', graphHeight)
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+    const gXAxis = graph.append('g')
+        .attr('transform', `translate(0, ${graphHeight})`);
+
+    const gYAxis = graph.append('g')
 
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.Amount)])
@@ -116,4 +78,84 @@ getData().then((result) => {
 
     gYAxis.selectAll('text')
         .style('font-size', 14);
-});
+}
+
+const drawPieGraph = (data) => {
+    d3.select("#productAmountPieContainer").select("svg").remove();
+    const pieSvg = d3.select("#productAmountPieContainer")
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+    const radius = Math.min(graphWidth, graphHeight) / 2;
+    const g = pieSvg.append("g").attr("transform", "translate(" + graphWidth / 2 + "," + height / 2 + ")");
+
+    // Generate the pie
+    const pie = d3.pie().value(d => d.Amount);
+
+    // Generate the arcs
+    const arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+    const path = d3.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+    const label = d3.arc()
+        .outerRadius(radius)
+        .innerRadius(radius - 80);
+
+    const arcs = g.selectAll("arc")
+        .data(pie(data))
+        .enter()
+        .append("g")
+        .attr("class", "arc");
+
+    arcs.append("path")
+        .attr("d", path)
+        .attr('fill', d => getColor(d3.max(data, d => d.Amount), d.data.Amount));
+
+    arcs.append("text")
+        .attr("transform", d => "translate(" + label.centroid(d) + ")")
+        .text(d => d.data.product + " " + d.data.Amount);
+}
+
+const getData = async (dataType) => {
+    if (dataType == "store") {
+        return $.get("/Statistics/getPurchasesByStore", (data, status) => {
+            if (status != "success") {
+                alert("error ocured while trying to get the statistics");
+            }
+        });
+    } else if (dataType == "product") {
+        return $.get("/Statistics/getPurchasesByProduct", (data, status) => {
+            if (status != "success") {
+                alert("error ocured while trying to get the statistics");
+            }
+        });
+    }
+    
+};
+
+const drawGraph = (dataType) => {
+    getData(dataType).then((result) => {
+        let jsonData = JSON.parse(result);
+        let data = [];
+        for (o in jsonData) {
+            const obj = {
+                product: "",
+                Amount: 0
+            }
+            obj.product = o;
+            obj.Amount = jsonData[o];
+            data.push(obj);
+        }
+        drawBarGraph(data);
+        drawPieGraph(data);
+
+    });
+}
+
+$(document).ready(() => {
+    drawGraph("store");
+})
