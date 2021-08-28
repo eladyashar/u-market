@@ -19,20 +19,25 @@ const loadAllUsers = () => {
 const generateUsersTable = () => {
     const tableBodyElement = $('#usersTableBody');
     tableBodyElement.empty();
+
     loadAllUsers().then(() => {
-        allUsers.forEach((user,userIndex) => {
-            const row = tableBodyElement.append('<tr>').children('tr:last');
-            row.append(`<td>${user.username}</td>`)
-                .append(`<td>${user.firstName}</td>`)
-                .append(`<td>${user.lastName}</td>`)
-                .append(`<td>${user.userRole === 0 ? 'Admin' : 'Client'}</td>`);
+        if (allUsers != false) {
+            allUsers.forEach((user, userIndex) => {
+                const row = tableBodyElement.append('<tr>').children('tr:last');
+                row.append(`<td>${user.username}</td>`)
+                    .append(`<td>${user.firstName}</td>`)
+                    .append(`<td>${user.lastName}</td>`)
+                    .append(`<td>${user.userRole === 0 ? 'Admin' : 'Client'}</td>`);
 
-            const editCol = row.append('<td>').children('td:last');
-            editCol.append(`<i class='fa fa-pen' onclick="openEditModal(${userIndex})"></i>`);
+                const editCol = row.append('<td>').children('td:last');
+                editCol.append(`<i class='fa fa-pen' onclick="openEditModal(${userIndex})"></i>`);
 
-            const deleteCol = row.append('<td>').children('td:last');
-            deleteCol.append(`<i class='fa fa-trash' onclick="removeUser('${user.username}')"></i>`)
-        })
+                const deleteCol = row.append('<td>').children('td:last');
+                deleteCol.append(`<i class='fa fa-trash' onclick="removeUser('${user.username}')"></i>`)
+            })
+        } else {
+            tableBodyElement.append('<tr>').children('tr:last').append('<td colspan="100%">Nothing was found</td>')
+        }
     });
 };
 

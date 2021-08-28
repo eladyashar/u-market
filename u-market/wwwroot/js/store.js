@@ -45,9 +45,9 @@ const generateStoresTable = async () => {
 
     await loadAllStores();
 
-    if (allStores) {
+    if (allStores != false) {
         allStores.forEach(async (store, storeIndex) => {
-            await generateStoreDetailsRow(store, storeIndex);
+            generateStoreDetailsRow(store, storeIndex);
             const marker = new google.maps.Marker({
                 position: { lat: store.lat, lng: store.lang },
                 map,
@@ -59,6 +59,8 @@ const generateStoresTable = async () => {
                 infowindow.open(map, this);
             });
         });
+    } else {
+        tableBodyElement.append('<tr>').children('tr:last').append("<td colspan='100%'>Nothing was found</td>")
     }
 
     const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
@@ -74,7 +76,7 @@ const loadAllStores = async () => {
     });
 };
 
-const generateStoreDetailsRow = async (store, storeIndex) => {
+const generateStoreDetailsRow = (store, storeIndex) => {
     const detailsRow = $('#storesTableBody').prepend('<tr>').children('tr:first');
     detailsRow.append(`<td>${store.name}</td>`)
         .append(`<td>${store.owner.firstName} ${store.owner.lastName}</td>`)

@@ -22,7 +22,7 @@ const generateTagsTable = () => {
     const tableBodyElement = $('#tagsTableBody');
     tableBodyElement.empty();
     loadAllTags().then(() => {
-        if (allTags) {
+        if (allTags != false) {
             allTags.forEach((tag) => {
                 const row = tableBodyElement.append('<tr>').children('tr:last');
                 row.append(`<td>${tag.id}</td>`)
@@ -36,7 +36,7 @@ const generateTagsTable = () => {
             })
         } else {
             const row = tableBodyElement.append('<tr>').children('tr:last');
-            row.append(`<td col-span="100%">Nothing was found</td>`);
+            row.append(`<td colspan="100%">Nothing was found</td>`);
         }
     });
 };
