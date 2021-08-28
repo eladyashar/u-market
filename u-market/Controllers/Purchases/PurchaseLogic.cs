@@ -70,11 +70,7 @@ namespace u_market.Controllers.Purchases
 
         public IList<String> GetPurchasesDates()
         {
-            return this.Ctx.Purchases.Select(p => p.PurchaseDate.Date.ToString()).ToList();
+            return this.Ctx.Purchases.GroupBy(p => p.PurchaseDate.Date).Select(p => p.Key.Date.ToString()).ToList();
         }
-
-        
-
-
     }
 }
