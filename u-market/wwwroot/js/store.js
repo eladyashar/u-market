@@ -387,6 +387,17 @@ const setProductImage = () => {
     $("#productImage").attr('src', getImageUrl(imageUrl));
 };
 
+const changeCurrency = event => {
+    const priceValue = $("#productPrice").val();
+    const newCurrency = $("#currency").val();
+
+    const url = `https://free.currconv.com/api/v7/convert?q=${oldCurrency}_${newCurrency}&compact=ultra&apiKey=c832ed4009e43d98f0fb`;
+    $.get(url, (data) => {
+        const price = Number(priceInIls * data["ILS_" + newCurrency]);
+        $("#productPrice").val(price.toFixed(2));
+    });
+}
+
 const getImageUrl = url => !url ? "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png" : url;
 
 const getStore = storeId => allStores.find(({ id }) => storeId === id);
