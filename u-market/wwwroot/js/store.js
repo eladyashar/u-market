@@ -1,4 +1,5 @@
 ﻿let allStores = [];
+let selectedStore = null;
 let map;
 let filterQuery = '';
 
@@ -12,6 +13,7 @@ const initMap = () => {
 
 $(document).ready(() => {
     $('#map-container').hide();
+    $("#selectedStoreContainer").hide();
     $('.address-input').toArray().forEach(addressInput => {
         new google.maps.places.Autocomplete(addressInput);
     });
@@ -20,11 +22,11 @@ $(document).ready(() => {
 
     $('#map-switch').click(() => {
         if (!isMap) {
-            $('.products-table-container').hide();
+            $('.stores-table-container').hide();
             $('#map-container').show();
         } else {
             $('#map-container').hide();
-            $('.products-table-container').show();
+            $('.stores-table-container').show();
         }
 
         isMap = !isMap;
@@ -77,7 +79,7 @@ const loadAllStores = async () => {
 };
 
 const generateStoreDetailsRow = (store, storeIndex) => {
-    const detailsRow = $('#storesTableBody').prepend('<tr>').children('tr:first');
+    const detailsRow = $('#storesTableBody').append(`<tr onclick="selectStore(${store.id})">`).children('tr:last');
     detailsRow.append(`<td>${store.name}</td>`)
         .append(`<td>${store.owner.firstName} ${store.owner.lastName}</td>`)
         .append(`<td>${store.address}</td>`);
@@ -114,7 +116,7 @@ const openEditStoreModal = async storeIndex => {
     editModal.find('#address').val(store.address);
     editModal.find('.error').text('');
 
-    editModal.find('#submit').attr('onclick', `saveStore(${storeIndex})`)
+    editModal.find('#submitStore').attr('onclick', `saveStore(${storeIndex})`)
     editModal.modal('show');
 };
 
@@ -129,7 +131,7 @@ const openAddStoreModal = () => {
     addModal.find('#address').attr('placeholder', 'Address...');
     addModal.find('.error').text('');
 
-    addModal.find('#submit').attr('onclick', 'saveStore()')
+    addModal.find('#submitStore').attr('onclick', 'saveStore()')
     addModal.modal('show');
 };
 
@@ -163,7 +165,7 @@ const saveStore = async storeIndex => {
     try {
         await (isNaN(storeIndex) ? addStore(store) : updateStore(store));
         closeStoreModal();
-        generateStoresTable();
+        location.reload()
     }
     catch (error) {
         alert(error.responseText);
@@ -211,7 +213,7 @@ const addStore = store =>
 
 const removeStore = async storeId => {
     await deleteStore(storeId);
-    generateStoresTable();
+    location.reload();
 };
 
 const deleteStore = storeId =>
@@ -221,3 +223,164 @@ const deleteStore = storeId =>
         data: JSON.stringify(storeId),
         contentType: "application/json; charset=utf-8",
     });
+
+const selectStore = async storeId => {
+    $("#storesTable").addClass("hidden-stores-table");
+    $('#map-switch').hide();
+    $('.fa-map-marked').hide();
+    $("#search").hide();
+    $("#selectedStoreContainer").show();
+    $("#goBack").attr('onclick', 'location.reload()');
+
+    await generateProductsTable(storeId);
+};
+
+const generateProductsTable = async storeId => {
+    await loadAllStores();
+    selectedStore = getStore(storeId);
+
+    $("#selectedStoreName").empty();
+    $("#selectedStoreName").append(`${selectedStore.name}`)
+    const tableBodyElement = $('#productsTableBody');
+    tableBodyElement.empty();
+
+    selectedStore.products.forEach((product, productIndex) => {
+        const detailsRow = tableBodyElement.append('<tr>').children('tr:last');
+        detailsRow.append(`<td>${product.name}</td>`)
+            .append(`<td>${product.price}`)
+            .append(`<td>${product.description}</td>`)
+            .append(`<td><img class='product-image' src='${getImageUrl(product.imageUrl)}'</td>`);
+
+        const editCol = detailsRow.append('<td>').children('td:last');
+        editCol.append(`<i class='fa fa-pen' onclick="openSaveProductModal(${productIndex})"></i>`);
+
+        const deleteCol = detailsRow.append('<td>').children('td:last');
+        deleteCol.append(`<i class='fa fa-trash' onclick="removeProduct(${product.id})"></i>`);
+    });
+
+    const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
+    const addStroeCol = addStoreRow.append('<td colspan="100%" class="add-store-row" onclick="openSaveProductModal()">').children('td:last');
+    addStroeCol.append(`<i class="fas fa-plus"></i>`);
+};
+
+const removeProduct = async (productId) => {
+    try {
+        await deleteProduct(productId);
+        generateProductsTable(selectedStore.id);
+    }
+    catch (error) {
+        alert(error.responseText);
+    }
+}
+
+const deleteProduct = productId =>
+    $.ajax({
+        url: '/Store/RemoveProduct/',
+        type: 'PUT',
+        data: JSON.stringify(productId),
+        contentType: "application/json; charset=utf-8",
+    });
+
+const openSaveProductModal = productIndex => {
+    const productModal = $('#productModal');
+    productModal.modal('show');
+
+    if (isNaN(productIndex)) {
+        productModal.find('#productModalTitle').text('Add Store');
+    }
+    else {
+        fillProductDetails(selectedStore.products[productIndex]);
+    }
+
+    productModal.find('#submitProduct').attr('onclick', `saveProduct(${productIndex})`);
+}
+
+const fillProductDetails = product => {
+    const productModal = $('#productModal');
+
+    productModal.find('#productModalTitle').text('Edit Store');
+    productModal.find('#productName').val(product.name);
+    productModal.find('#productPrice').val(product.price);
+    productModal.find('#productDescription').val(product.description);
+    productModal.find('#productImageUrl').attr('src', getImageUrl(product.imageUrl));
+};
+
+const saveProduct = async productIndex => {
+    const product = getProductDetails(productIndex);
+
+    if (!validateProductDetails(product)) {
+        return;
+    }
+
+    try {
+        isNaN(productIndex) ? await addProduct(product) : await updateProduct(product);
+        closeProductModal();
+        await generateProductsTable(selectedStore.id);
+    }
+    catch (error) {
+        alert(error.responseText);
+    }
+}
+
+const addProduct = product =>
+    $.ajax({
+        url: '/Store/AddProduct/',
+        type: 'PUT',
+        data: JSON.stringify(product),
+        contentType: "application/json; charset=utf-8",
+    });
+
+const updateProduct = product =>
+    $.ajax({
+        url: '/Store/UpdateProduct/',
+        type: 'PUT',
+        data: JSON.stringify(product),
+        contentType: "application/json; charset=utf-8",
+    });
+
+const closeProductModal = () => {
+    $('#productModal #productName').val('');
+    $('#productModal #productPrice').val('');
+    $('#productModal #productDescription').val('');
+    $('#productModal').modal('hide');
+};
+
+const getProductDetails = productIndex => {
+    const product = isNaN(productIndex) ? {} : selectedStore.products[productIndex];
+    const productModal = $('#productModal');
+    const productNameValue = productModal.find('#productName').val();
+    const productPriceValue = productModal.find('#productPrice').val();
+    const productDescriptionValue = productModal.find('#productDescription').val();
+    const productImageUrlValue = productModal.find('#productImageUrl').attr('src');
+
+    product.name = productNameValue ? productNameValue : '';
+    product.price = productPriceValue ? parseInt(productPriceValue) : 0;
+    product.description = productDescriptionValue ? productDescriptionValue : '';
+    product.imageUrl = productImageUrlValue ? productImageUrlValue : '';
+    product.storeId = selectedStore.id;
+
+    return product;
+}
+
+const validateProductDetails = product => {
+    if (!product.name) {
+        $(".error").text('Product name cannot be empty');
+        return false;
+    }
+
+    if (product.price <= 0) {
+        $(".error").text('Product must have a positive price');
+        return false;
+    }
+
+    if (!product.description) {
+        $(".error").text('Product description cannot be empty');
+        return false;
+    }
+
+    return true;
+}
+
+const getImageUrl = url => url == null || url === "" ? "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png" : url;
+
+const getStore = storeId => allStores.find(({ id }) => storeId === id);
