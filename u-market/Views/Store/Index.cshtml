@@ -122,7 +122,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="productImageUrl" class="form-label">Image URL</label>
-                    <img id="productImageUrl" class="product-image"/>
+                    <input type="url" class="form-control" id="productImageUrl" oninput="setProductImage()" />
+                    <br/>
+                    <img id="productImage" class="product-image"/>
                 </div>
             </div>
             <label class="error"></label>

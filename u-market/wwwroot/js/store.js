@@ -292,6 +292,7 @@ const openSaveProductModal = productIndex => {
         fillProductDetails(selectedStore.products[productIndex]);
     }
 
+    setProductImage();
     productModal.find('#submitProduct').attr('onclick', `saveProduct(${productIndex})`);
 }
 
@@ -302,7 +303,7 @@ const fillProductDetails = product => {
     productModal.find('#productName').val(product.name);
     productModal.find('#productPrice').val(product.price);
     productModal.find('#productDescription').val(product.description);
-    productModal.find('#productImageUrl').attr('src', getImageUrl(product.imageUrl));
+    productModal.find('#productImageUrl').val(getImageUrl(product.imageUrl));
 };
 
 const saveProduct = async productIndex => {
@@ -351,7 +352,7 @@ const getProductDetails = productIndex => {
     const productNameValue = productModal.find('#productName').val();
     const productPriceValue = productModal.find('#productPrice').val();
     const productDescriptionValue = productModal.find('#productDescription').val();
-    const productImageUrlValue = productModal.find('#productImageUrl').attr('src');
+    const productImageUrlValue = productModal.find('#productImageUrl').val();
 
     product.name = productNameValue ? productNameValue : '';
     product.price = productPriceValue ? parseInt(productPriceValue) : 0;
@@ -379,8 +380,13 @@ const validateProductDetails = product => {
     }
 
     return true;
-}
+};
 
-const getImageUrl = url => url == null || url === "" ? "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png" : url;
+const setProductImage = () => {
+    const imageUrl = $("#productImageUrl").val();
+    $("#productImage").attr('src', getImageUrl(imageUrl));
+};
+
+const getImageUrl = url => !url ? "https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png" : url;
 
 const getStore = storeId => allStores.find(({ id }) => storeId === id);

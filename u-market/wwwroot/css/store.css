@@ -63,6 +63,7 @@
 
 .add-store-row:hover, .add-product-row:hover {
     color: gray;
+    cursor: pointer;
 }
 
 #selectedStoreName {
