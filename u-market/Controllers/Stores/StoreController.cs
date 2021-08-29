@@ -13,13 +13,11 @@ namespace u_market.Controllers.Stores
     {
         private readonly ProductLogic ProductLogic;
         private readonly StoreLogic StoreLogic;
-        private readonly UsersLogic UsersLogic;
 
         public StoreController(MarketContext ctx)
         {
             ProductLogic = new ProductLogic(ctx);
             StoreLogic = new StoreLogic(ctx);
-            UsersLogic = new UsersLogic(ctx);
         }
 
         public ActionResult Index()
@@ -35,13 +33,13 @@ namespace u_market.Controllers.Stores
                 return Ok(StoreLogic.GetAll(query));
             }
 
-            return Ok(new []{ StoreLogic.FindMyStore(User.Claims.Single(c => c.Type.Equals("Username")).Value) });
+            return Ok(new []{ StoreLogic.FindMyStore(User.Claims.SingleOrDefault(c => c.Type.Equals("Username")).Value) });
         }
 
         [HttpPost]
         public IActionResult Insert([FromBody] Store store)
         {
-            if (StoreLogic.FindMyStore(User.Claims.Single(c => c.Type.Equals("Username")).Value) == null)
+            if (StoreLogic.FindMyStore(User.Claims.SingleOrDefault(c => c.Type.Equals("Username")).Value) == null)
             {
                 StoreLogic.Insert(store, User);
 
@@ -67,35 +65,37 @@ namespace u_market.Controllers.Stores
             return Ok();
         }
 
-        public IActionResult AddProduct([Bind("Name,StoreId,Price,ImageUrl,Description")] Product product)
+        [HttpPut]
+        public IActionResult AddProduct([FromBody] Product product)
         {
             try
             {
                 ProductLogic.AddProduct(product);
-                
-                return StatusCode(200);
+
+                return Ok();
             }
             catch
             {
-                return StatusCode(500);
+                return BadRequest();
             }
         }
 
-        public IActionResult UpdateProduct([Bind("Id,Name,StoreId,Price,ImageUrl,Description")] Product product)
+        public IActionResult UpdateProduct([FromBody] Product product)
         {
             try
             {
                 ProductLogic.UpdateProduct(product);
                 
-                return StatusCode(200);
+                return Ok();
             }
             catch
             {
-                return StatusCode(500);
+                return BadRequest();
             }
         }
 
-        public IActionResult RemoveProduct([Bind("productId")] int productId)
+        [HttpPut]
+        public IActionResult RemoveProduct([FromBody] int productId)
         {
             try
             {
