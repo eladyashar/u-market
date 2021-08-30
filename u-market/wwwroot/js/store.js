@@ -2,6 +2,7 @@
 let selectedStore = null;
 let map;
 let filterQuery = '';
+let filterProducts = '';
 
 const initMap = () => {
     map = new google.maps.Map(document.getElementById("map-container"), {
@@ -37,6 +38,10 @@ $(document).ready(() => {
         generateStoresTable();
     }, 1000));
 
+    $("#search-product").on("input", _.debounce(() => {
+        filterProducts = $("#search-product").val();
+        generateProductsTable(selectedStore.id);
+    }, 1000));
     generateStoresTable();
 });
 
@@ -243,21 +248,26 @@ const generateProductsTable = async storeId => {
     $("#selectedStoreName").append(`${selectedStore.name}`)
     const tableBodyElement = $('#productsTableBody');
     tableBodyElement.empty();
+    const storeFilteredProducts = selectedStore.products.filter(p => p.name.includes(filterProducts) || p.description.includes(filterProducts));
 
-    selectedStore.products.forEach((product, productIndex) => {
-        const detailsRow = tableBodyElement.append('<tr>').children('tr:last');
-        detailsRow.append(`<td>${product.name}</td>`)
-            .append(`<td>${product.price}`)
-            .append(`<td>${product.description}</td>`)
-            .append(`<td><img class='product-image' src='${getImageUrl(product.imageUrl)}'</td>`);
+    if (storeFilteredProducts != false) {
+        storeFilteredProducts.forEach((product, productIndex) => {
+            const detailsRow = tableBodyElement.append('<tr>').children('tr:last');
+            detailsRow.append(`<td>${product.name}</td>`)
+                .append(`<td>${product.price}`)
+                .append(`<td>${product.description}</td>`)
+                .append(`<td><img class='product-image' src='${getImageUrl(product.imageUrl)}'</td>`);
 
-        const editCol = detailsRow.append('<td>').children('td:last');
-        editCol.append(`<i class='fa fa-pen' onclick="openSaveProductModal(${productIndex})"></i>`);
+            const editCol = detailsRow.append('<td>').children('td:last');
+            editCol.append(`<i class='fa fa-pen' onclick="openSaveProductModal(${productIndex})"></i>`);
 
-        const deleteCol = detailsRow.append('<td>').children('td:last');
-        deleteCol.append(`<i class='fa fa-trash' onclick="removeProduct(${product.id})"></i>`);
-    });
-
+            const deleteCol = detailsRow.append('<td>').children('td:last');
+            deleteCol.append(`<i class='fa fa-trash' onclick="removeProduct(${product.id})"></i>`);
+        });
+    } else {
+        tableBodyElement.append('<tr>').children('tr:last').append("<td colspan='100%'>No matching products </td>")
+    }
+    
     const addStoreRow = tableBodyElement.append('<tr>').children('tr:last');
     const addStroeCol = addStoreRow.append('<td colspan="100%" class="add-store-row" onclick="openSaveProductModal()">').children('td:last');
     addStroeCol.append(`<i class="fas fa-plus"></i>`);
