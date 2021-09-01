@@ -26,4 +26,8 @@
     <Folder Include="Views\Purchase\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\css\statistics.css" />
+    <Content Remove="wwwroot\js\statistics.js" />
+  </ItemGroup>
 </Project>

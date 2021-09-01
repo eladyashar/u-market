@@ -16,10 +16,9 @@ namespace u_market.Controllers.Purchases
             this.Ctx = Ctx;
         }
 
-        public IList<Purchase> GetAll(int? productId, int? tag, string? date, int? storeId)
+        public IList<Purchase> GetAll(string? query, int? productId, int? tag, string? date, int? storeId)
         {
             IQueryable<Purchase> purchases = this.Ctx.Purchases.Include(c => c.Product);
-            //IQueryable<Purchase> purchases = this.Ctx.Purchases.Include(c => c.Product).Include(p => p.User);
 
             if (productId != null)
             {
@@ -41,17 +40,12 @@ namespace u_market.Controllers.Purchases
                 purchases = purchases.Where(p => p.Product.Store.Id == storeId);
             }
 
-            //return purchases.Include(c => c.Product).Include(p => p.User).OrderBy(p => p.ProductId).ToList();
+            if (query != null)
+            {
+                purchases = purchases.Where(p => p.Product.Name.Contains(query) || p.Product.Store.Name.Contains(query) || p.Username.Contains(query) || p.PurchaseDate.ToString().Contains(query));
+            }
+
             return purchases.ToList();
-
-            //var query = this.Ctx.Purchases.AsQueryable();
-
-            //if (filter != null)
-            //{
-            //    query = query.Where(t => t.Product.Name.Contains(filter));
-            //}
-
-            //return query.Include(c => c.Product).Include(p => p.User).OrderBy(p => p.ProductId).ToList();
         }
         public IList<Store> GetAllStores()
         {
@@ -70,11 +64,7 @@ namespace u_market.Controllers.Purchases
 
         public IList<String> GetPurchasesDates()
         {
-            return this.Ctx.Purchases.Select(p => p.PurchaseDate.Date.ToString()).ToList();
+            return this.Ctx.Purchases.GroupBy(p => p.PurchaseDate.Date).Select(p => p.Key.Date.ToString()).ToList();
         }
-
-        
-
-
     }
 }

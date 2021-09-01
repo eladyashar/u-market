@@ -15,9 +15,16 @@ namespace u_market.Controllers.Users
             Ctx = ctx;
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<User> GetAll(string? query)
         {
-            return Ctx.Users.ToList();
+            IQueryable<User> users = Ctx.Users;
+
+            if (query != null)
+            {
+                users = users.Where(u => u.FirstName.Contains(query) || u.LastName.Contains(query));
+            }
+
+            return users.ToList();
         }
 
         public User FindUser(string username)

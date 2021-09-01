@@ -22,6 +22,9 @@ namespace u_market.Models
         [Column("lang")]
         public double Lang { get; set; }
 
+        [Column("address")]
+        public string Address { get; set; }
+
         [Required]
         [Column("OwnerId")]
         public string OwnerId { get; set; }

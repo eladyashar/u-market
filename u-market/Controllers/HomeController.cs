@@ -24,9 +24,9 @@ namespace u_market.Controllers
             this.Ctx = Ctx;
         }
 
-        public IActionResult Index([FromQuery(Name = "store")] int? store, [FromQuery(Name = "price")] double? price, [FromQuery(Name = "tag")] int? tag)
+        public IActionResult Index([FromQuery(Name = "query")] string? query, [FromQuery(Name = "store")] int? store, [FromQuery(Name = "price")] double? price, [FromQuery(Name = "tag")] int? tag)
         {
-            ViewBag.Products = GetAll(store, price, tag);
+            ViewBag.Products = GetAll(query, store, price, tag);
 
             ViewBag.Stores = GetAllStores();
             ViewBag.Prices = GetPrices();
@@ -37,9 +37,18 @@ namespace u_market.Controllers
             return View();
         }
 
-        private IList<Product> GetAll(int? storeId, double? price, int? tagId)
+        private IList<Product> GetAll(string? query, int? storeId, double? price, int? tagId)
         {
             IQueryable<Product> products = this.Ctx.Products.Include(p => p.Store);
+            
+            if (query != null)
+            {
+                products = products.Where(p => p.Name.Contains(query) || 
+                                            p.Tags.Any(t => t.Name.Contains(query)) || 
+                                            p.Store.Name.Contains(query) ||
+                                            p.Description.Contains(query) ||
+                                            p.Price.ToString().Contains(query));
+            }
 
             if (storeId != null)
             {
