@@ -71,6 +71,13 @@ namespace u_market
                     name: "default",
                     pattern: "{controller=Users}/{action=Login}");
             });
+
+            app.UseStatusCodePages(async context => {
+                if (context.HttpContext.Response.StatusCode == 404)
+                {
+                    context.HttpContext.Response.Redirect("/Error/404.cshtml");
+                }
+            });
         }
     }
 }
