@@ -6,9 +6,11 @@ using u_market.DAL;
 using u_market.Models;
 using Microsoft.EntityFrameworkCore;
 using u_market.Controllers.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace u_market.Controllers.Stores
 {
+    [Authorize(Roles = "Admin,Client")]
     public class StoreController : Controller
     {
         private readonly ProductLogic ProductLogic;

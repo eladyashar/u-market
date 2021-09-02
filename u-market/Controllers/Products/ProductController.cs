@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
 using u_market.Models;
 
 namespace u_market.Controllers
 {
+    [Authorize(Roles = "Admin,Client")]
     public class ProductController : Controller
     {
         private readonly MarketContext Ctx;

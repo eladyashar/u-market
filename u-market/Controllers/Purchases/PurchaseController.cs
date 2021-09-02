@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace u_market.Controllers.Purchases
 {
+    [Authorize(Roles = "Admin")]
     public class PurchaseController : Controller
     {
         private PurchaseLogic Logic { get; }

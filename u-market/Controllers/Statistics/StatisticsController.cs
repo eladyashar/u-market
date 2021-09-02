@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace u_market.Controllers.Statistics
 {
-    [Authorize(Roles = "Admin,Client")]
+    [Authorize(Roles = "Admin")]
     public class StatisticsController : Controller
     {
         private readonly MarketContext Ctx;
