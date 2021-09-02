@@ -89,5 +89,12 @@ namespace u_market.Controllers
         {
             return this.Ctx.Tags.ToList();
         }
+
+
+        [Route("/Views/Error/404.cshtml")]
+        public IActionResult HandleError(int code)
+        {
+            return View("~/Views/Error/404.cshtml");
+        }
     }
 }
