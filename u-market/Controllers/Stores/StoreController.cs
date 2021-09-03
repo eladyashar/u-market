@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
 using u_market.Models;
-using Microsoft.EntityFrameworkCore;
-using u_market.Controllers.Users;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace u_market.Controllers.Stores
 {
@@ -82,11 +81,13 @@ namespace u_market.Controllers.Stores
         }
 
         [HttpPut]
-        public IActionResult AddProduct([FromBody] Product product)
+        public IActionResult AddProduct([FromBody] JObject jsonData)
         {
             try
             {
-                ProductLogic.AddProduct(product);
+                var product = jsonData["product"].ToObject<Product>();
+                var tags = jsonData["tags"].ToObject<List<Tag>>();
+                ProductLogic.AddProduct(product, tags);
 
                 return Ok();
             }
@@ -96,11 +97,13 @@ namespace u_market.Controllers.Stores
             }
         }
 
-        public IActionResult UpdateProduct([FromBody] Product product)
+        public IActionResult UpdateProduct([FromBody] JObject jsonData)
         {
             try
             {
-                ProductLogic.UpdateProduct(product);
+                var product = jsonData["product"].ToObject<Product>();
+                var tags = jsonData["tags"].ToObject<List<Tag>>();
+                ProductLogic.UpdateProduct(product, tags);
                 
                 return Ok();
             }

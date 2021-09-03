@@ -342,13 +342,23 @@ const saveProduct = async productIndex => {
     }
 }
 
-const addProduct = product =>
+const addProduct = product => {
+    const selectedTags = product.tags;
+    delete product.tags;
+
+    const data = {
+        product: product,
+        tags: selectedTags
+    };
+
     $.ajax({
         url: '/Store/AddProduct/',
         type: 'PUT',
-        data: JSON.stringify(product),
+        dataType: 'json',
+        data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
     });
+};
 
 const updateProduct = product =>
     $.ajax({
@@ -362,6 +372,7 @@ const closeProductModal = () => {
     $('#productModal #productName').val('');
     $('#productModal #productPrice').val('');
     $('#productModal #productDescription').val('');
+    [...$('#productTags')[0].options].forEach((option) => option.selected = false);
     $('#productModal #productImageUrl').val('');
     $(".error").text('');
     $('#productModal').modal('hide');
@@ -390,7 +401,6 @@ const getProductDetails = productIndex => {
         {
             id: parseInt(value),
             name: text,
-            products: [{ id: product.id }]
         }));
 
     product.imageUrl = productImageUrlValue;

@@ -1,4 +1,5 @@
-﻿using u_market.DAL;
+﻿using System.Collections.Generic;
+using u_market.DAL;
 using u_market.Models;
 
 namespace u_market.Controllers
@@ -12,9 +13,17 @@ namespace u_market.Controllers
             Ctx = ctx;
         }
 
-        public void AddProduct(Product product)
+        public void AddProduct(Product product, List<Tag> tags)
         {
             Ctx.Products.Add(product);
+
+            foreach (Tag tag in tags)
+            {
+                Ctx.Tags.Add(tag);
+                Ctx.Attach(tag);
+                product.Tags.Add(tag);
+            }
+
             Ctx.SaveChanges();
         }
 
@@ -24,8 +33,9 @@ namespace u_market.Controllers
             Ctx.SaveChanges();
         }
 
-        public void UpdateProduct(Product product)
+        public void UpdateProduct(Product product, List<Tag> tags)
         {
+
             Ctx.Products.Update(product);
             Ctx.SaveChanges();
         }
