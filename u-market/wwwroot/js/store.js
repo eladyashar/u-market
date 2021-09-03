@@ -276,7 +276,7 @@ const generateProductsTable = async storeId => {
 const removeProduct = async (productId) => {
     try {
         await deleteProduct(productId);
-        generateProductsTable(selectedStore.id);
+        await generateProductsTable(selectedStore.id);
     }
     catch (error) {
         alert(JSON.parse(error.responseText).message);
@@ -333,7 +333,12 @@ const saveProduct = async productIndex => {
     }
 
     try {
-        isNaN(productIndex) ? await addProduct(product) : await updateProduct(product);
+        const data = {
+            product: product,
+            tags: getSelectedTags()
+        };
+
+        isNaN(productIndex) ? await addProduct(data) : await updateProduct(data);
         closeProductModal();
         await generateProductsTable(selectedStore.id);
     }
@@ -342,37 +347,29 @@ const saveProduct = async productIndex => {
     }
 }
 
-const addProduct = product => {
-    const selectedTags = product.tags;
-    delete product.tags;
-
-    const data = {
-        product: product,
-        tags: selectedTags
-    };
-
-    $.ajax({
+const addProduct = async data => {
+    await $.ajax({
         url: '/Store/AddProduct/',
         type: 'PUT',
-        dataType: 'json',
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
     });
 };
 
-const updateProduct = product =>
-    $.ajax({
+const updateProduct = async data => {
+    await $.ajax({
         url: '/Store/UpdateProduct/',
         type: 'PUT',
-        data: JSON.stringify(product),
+        data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
     });
+};
 
 const closeProductModal = () => {
     $('#productModal #productName').val('');
     $('#productModal #productPrice').val('');
     $('#productModal #productDescription').val('');
-    [...$('#productTags')[0].options].forEach((option) => option.selected = false);
+    $('#productTags').find('option').remove();
     $('#productModal #productImageUrl').val('');
     $(".error").text('');
     $('#productModal').modal('hide');
@@ -384,10 +381,7 @@ const getProductDetails = productIndex => {
     const productPriceValue = productModal.find('#productPrice').val();
     const productDescriptionValue = productModal.find('#productDescription').val();
     const productImageUrlValue = productModal.find('#productImageUrl').val();
-    const selectedTagsValues = [...$('#productTags')[0].options]
-        .filter(({ selected }) => selected)
-        .map(({ value, text }) => ({ value, text }));
-
+   
     const product = {};
 
     if (!isNaN(productIndex)) {
@@ -397,12 +391,6 @@ const getProductDetails = productIndex => {
     product.name = productNameValue;
     product.price = productPriceValue ? parseInt(productPriceValue) : 0;
     product.description = productDescriptionValue;
-    product.tags = selectedTagsValues.map(({ value, text }) => (
-        {
-            id: parseInt(value),
-            name: text,
-        }));
-
     product.imageUrl = productImageUrlValue;
     product.storeId = selectedStore.id;
 
@@ -439,6 +427,18 @@ const setTagsSelect = async () => {
         tagsSelect.append(`<option value=${tag.id}>${tag.name}</option>`);
     });
 }
+
+const getSelectedTags = () => {
+    const selectedTagsValues = [...$('#productTags')[0].options]
+        .filter(({ selected }) => selected)
+        .map(({ value, text }) => ({ value, text }));
+
+    return selectedTagsValues.map(({ value, text }) => (
+        {
+            id: parseInt(value),
+            name: text,
+        }));
+};
 
 const setProductImage = () => {
     const imageUrl = $("#productImageUrl").val();
