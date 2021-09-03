@@ -13,14 +13,18 @@
             "Username": '@ViewBag.Username',
             "ProductId": id
         }
-        $.post("/Product/AddPurchase", Purchase, (data, status) => {
-            if (status != "success") {
-                alert("error ocured while trying to save the product");
+        $.ajax({
+            type: "POST",
+            url: "/Product/AddPurchase",
+            data: Purchase,
+            success: () => {
+                const purchaseText = "You got yourself a new " + name + "!";
+                $('.modal-body').html(purchaseText);
+            },
+            error: (data) => {
+                $('.modal-body').html(JSON.parse(data.responseText).message);
             }
         });
-
-        var purchaseText = "You got yourself a new " + name + "!";
-        $('.modal-body').html(purchaseText);
     };
 
     const openShareDialog = productName => {

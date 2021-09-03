@@ -54,15 +54,29 @@ namespace u_market.Controllers.Stores
         [HttpPut]
         public IActionResult Update([FromBody] Store store)
         {
-            StoreLogic.Update(store);
-            
+            try
+            {
+                StoreLogic.Update(store);
+            }
+            catch
+            {
+                return BadRequest(new { Message = "Something went wrong" });
+            }
+
             return Ok();
         }
 
         [HttpDelete]
         public IActionResult Delete([FromBody] int storeId)
         {
-            StoreLogic.Delete(storeId);
+            try
+            {
+                StoreLogic.Delete(storeId);
+            }
+            catch
+            {
+                return BadRequest(new { Message = "Something went wrong" });
+            }
 
             return Ok();
         }
@@ -78,7 +92,7 @@ namespace u_market.Controllers.Stores
             }
             catch
             {
-                return BadRequest();
+                return BadRequest(new { Message = "Something went wrong" });
             }
         }
 

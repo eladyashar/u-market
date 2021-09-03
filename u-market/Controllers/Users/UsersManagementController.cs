@@ -43,8 +43,16 @@ namespace u_market.Controllers.Users
         [HttpDelete]
         public IActionResult Delete([FromBody] string username)
         {
-            var user = Logic.FindUser(username);
-            Logic.RemoveUser(user);
+            try
+            {
+                var user = Logic.FindUser(username);
+                Logic.RemoveUser(user);
+            }
+            catch
+            {
+                return BadRequest(new { Message = "Something went wrong" });
+            }
+
             return Ok();
         }
     }
