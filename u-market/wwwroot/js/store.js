@@ -173,7 +173,7 @@ const saveStore = async storeIndex => {
         location.reload()
     }
     catch (error) {
-        alert(error.responseText);
+        alert(JSON.parse(error.responseText).message);
     }
 };
 
@@ -279,7 +279,7 @@ const removeProduct = async (productId) => {
         generateProductsTable(selectedStore.id);
     }
     catch (error) {
-        alert(error.responseText);
+        alert(JSON.parse(error.responseText).message);
     }
 }
 
@@ -329,7 +329,7 @@ const saveProduct = async productIndex => {
         await generateProductsTable(selectedStore.id);
     }
     catch (error) {
-        alert(error.responseText);
+        alert(JSON.parse(error.responseText).message);
     }
 }
 

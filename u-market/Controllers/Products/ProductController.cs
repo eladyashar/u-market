@@ -24,10 +24,10 @@ namespace u_market.Controllers
             }
             catch
             {
-                return StatusCode(500);
+                return BadRequest(new { Message = "Something went wrong" });
             }
 
-            return StatusCode(200);
+            return Ok();
         }
     }
 }

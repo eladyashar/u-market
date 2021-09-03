@@ -35,7 +35,14 @@ namespace u_market.Controllers.Tags
         [Authorize(Roles = "Admin")]
         public IActionResult Update([FromBody] Tag tag)
         {
-            Logic.UpdateTag(tag);
+            try
+            {
+                Logic.UpdateTag(tag);
+            } 
+            catch
+            {
+                return BadRequest(new { Message = "Something went wrong" });
+            }
             return Ok();
         }
 
@@ -51,7 +58,15 @@ namespace u_market.Controllers.Tags
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            Logic.DeleteById(id);
+            try
+            {
+                Logic.DeleteById(id);
+            } 
+            catch
+            {
+                return BadRequest(new { Message = "Something went wrong" });
+            }
+
             return Ok();
         }
     }

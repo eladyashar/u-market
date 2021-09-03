@@ -94,8 +94,8 @@ const saveTag = () => {
                 $('#editTagModal').modal('hide');
                 generateTagsTable();
             },
-            error: () => {
-                alert('an error occured');
+            error: (data) => {
+                alert(JSON.parse(data.responseText).message);
             },
             complete: () => {
                 $('#editTagModal #tagName').val('')
