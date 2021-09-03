@@ -121,10 +121,15 @@
                     <input type="text" class="form-control" id="productDescription" />
                 </div>
                 <div class="mb-3">
+                    <label for="productTags" class="form-label">Choose Tags (hold Ctrl to choose multiple tags)</label>
+                    <select id="productTags" class="form-control product-tags" multiple>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label for="productImageUrl" class="form-label">Image URL</label>
                     <input type="url" class="form-control" id="productImageUrl" oninput="setProductImage()" />
-                    <br/>
-                    <img id="productImage" class="product-image"/>
+                    <br />
+                    <img id="productImage" class="product-image" />
                 </div>
             </div>
             <label class="error"></label>

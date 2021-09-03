@@ -39,7 +39,7 @@
     height: 0;
 }
 
-.fa-pen, .fa-trash {
+.fa-pen, .fa-trash, fa-plus {
     cursor: pointer;
 }
 
@@ -64,6 +64,10 @@
 .add-store-row:hover, .add-product-row:hover {
     color: gray;
     cursor: pointer;
+}
+
+.product-tags {
+    max-height: 102px;
 }
 
 #selectedStoreName {

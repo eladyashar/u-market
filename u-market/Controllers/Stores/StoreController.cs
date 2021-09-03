@@ -90,7 +90,7 @@ namespace u_market.Controllers.Stores
 
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
                 return BadRequest(new { Message = "Something went wrong" });
             }
@@ -104,7 +104,7 @@ namespace u_market.Controllers.Stores
                 
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
                 return BadRequest(new { Message = "Something went wrong" });
             }
