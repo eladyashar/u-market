@@ -92,7 +92,7 @@ namespace u_market.Controllers.Stores
             }
             catch
             {
-                return BadRequest();
+                return BadRequest(new { Message = "Something went wrong" });
             }
         }
 
