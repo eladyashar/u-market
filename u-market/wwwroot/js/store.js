@@ -84,10 +84,10 @@ const loadAllStores = async () => {
 };
 
 const generateStoreDetailsRow = (store, storeIndex) => {
-    const detailsRow = $('#storesTableBody').append(`<tr onclick="selectStore(${store.id})">`).children('tr:last');
-    detailsRow.append(`<td>${store.name}</td>`)
-        .append(`<td>${store.owner.firstName} ${store.owner.lastName}</td>`)
-        .append(`<td>${store.address}</td>`);
+    const detailsRow = $('#storesTableBody').append(`<tr>`).children('tr:last');
+    detailsRow.append(`<td onclick="selectStore(${store.id})">${store.name}</td>`)
+        .append(`<td onclick="selectStore(${store.id})">${store.owner.firstName} ${store.owner.lastName}</td>`)
+        .append(`<td onclick="selectStore(${store.id})">${store.address}</td>`);
 
     const editCol = detailsRow.append('<td>').children('td:last');
     editCol.append(`<i class='fa fa-pen' onclick="openEditStoreModal(${storeIndex})"></i>`);
@@ -296,7 +296,7 @@ const openSaveProductModal = productIndex => {
     productModal.modal('show');
 
     if (isNaN(productIndex)) {
-        productModal.find('#productModalTitle').text('Add Store');
+        productModal.find('#productModalTitle').text('Add Product');
     }
     else {
         fillProductDetails(selectedStore.products[productIndex]);
@@ -309,7 +309,7 @@ const openSaveProductModal = productIndex => {
 const fillProductDetails = product => {
     const productModal = $('#productModal');
 
-    productModal.find('#productModalTitle').text('Edit Store');
+    productModal.find('#productModalTitle').text('Edit Product');
     productModal.find('#productName').val(product.name);
     productModal.find('#productPrice').val(product.price);
     productModal.find('#productDescription').val(product.description);
@@ -353,22 +353,29 @@ const closeProductModal = () => {
     $('#productModal #productName').val('');
     $('#productModal #productPrice').val('');
     $('#productModal #productDescription').val('');
+    $('#productModal #productImageUrl').val('');
+    $(".error").text('');
     $('#productModal').modal('hide');
 };
 
 const getProductDetails = productIndex => {
-    const product = isNaN(productIndex) ? {} : selectedStore.products[productIndex];
     const productModal = $('#productModal');
     const productNameValue = productModal.find('#productName').val();
     const productPriceValue = productModal.find('#productPrice').val();
     const productDescriptionValue = productModal.find('#productDescription').val();
     const productImageUrlValue = productModal.find('#productImageUrl').val();
 
-    product.name = productNameValue ? productNameValue : '';
-    product.price = productPriceValue ? parseInt(productPriceValue) : 0;
-    product.description = productDescriptionValue ? productDescriptionValue : '';
-    product.imageUrl = productImageUrlValue ? productImageUrlValue : '';
-    product.storeId = selectedStore.id;
+    const product = {};
+
+    if (!isNaN(productIndex)) {
+        product.id = selectedStore.products[productIndex].id;
+    }
+
+    product.name = productNameValue,
+    product.price = productPriceValue ? parseInt(productPriceValue) : 0,
+    product.description = productDescriptionValue,
+    product.imageUrl = productImageUrlValue,
+    product.storeId = selectedStore.id
 
     return product;
 }
