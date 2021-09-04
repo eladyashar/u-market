@@ -42,6 +42,15 @@ namespace u_market.Controllers
             {
                 throw new ModelValidationException("Product name cannot be empty");
             }
+            else if (product.Name.Length > 15)
+            {
+                throw new ModelValidationException("Product name cannot be more than 15 sign");
+            }
+
+            if (product.Description.Length > 40)
+            {
+                throw new ModelValidationException("Product description cannot be more than 40 sign");
+            }
 
             if (product.Price <= 0)
             {

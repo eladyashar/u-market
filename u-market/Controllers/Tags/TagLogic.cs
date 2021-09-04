@@ -54,6 +54,10 @@ namespace u_market.Controllers.Tags
             {
                 throw new ModelValidationException("Tag name cannot be empty");
             }
+            else if(tag.Name.Length > 15)
+            {
+                throw new ModelValidationException("Tag name cannot be more than 15 sign");
+            }
         }
     }
 }

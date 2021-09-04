@@ -50,7 +50,7 @@
                 </div>
                 <div class="tag-name mb-3">
                     <label for="Name" class="form-label">Tag Name</label>
-                    <input asp-for="Name" type="text" class="form-control" id="tagName" />
+                    <input asp-for="Name" type="text" class="form-control" id="tagName" maxlength="15"/>
                     <span asp-validation-for="Name" id="edit-tag-name-error" class="text-danger"></span>
                 </div>
             </div>
@@ -73,7 +73,7 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="Name" class="form-label">Tag Name</label>
-                    <input asp-for="Name" type="text" class="form-control" id="tagName" />
+                    <input asp-for="Name" type="text" class="form-control" id="tagName" maxlength="15"/>
                     <span asp-validation-for="Name" id="add-tag-name-error" class="text-danger"></span>
                 </div>
             </div>

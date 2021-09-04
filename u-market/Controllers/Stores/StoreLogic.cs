@@ -57,6 +57,10 @@ namespace u_market.Controllers.Stores
             {
                 throw new ModelValidationException("Store name cannot be empty");
             }
+            else if(store.Name.Length > 20)
+            {
+                throw new ModelValidationException("Store name cannot be be more than 20 sign");
+            }
 
             if (store.Lat == 0 && store.Lang == 0)
             {
