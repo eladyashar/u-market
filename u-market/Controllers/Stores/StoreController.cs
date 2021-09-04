@@ -6,6 +6,7 @@ using u_market.Models;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using u_market.Exceptions;
 
 namespace u_market.Controllers.Stores
 {
@@ -42,12 +43,23 @@ namespace u_market.Controllers.Stores
         {
             if (StoreLogic.FindMyStore(User.Claims.SingleOrDefault(c => c.Type.Equals("Username")).Value) == null)
             {
-                StoreLogic.Insert(store, User);
+                try
+                {
+                    StoreLogic.Insert(store, User);
 
-                return Ok();
+                    return Ok();
+                }
+                catch (ModelValidationException ex)
+                {
+                    return BadRequest(new { ex.Message });
+                }
+                catch (Exception)
+                {
+                    return BadRequest(new { Message = "Something went wrong" });
+                }
             }
 
-            return BadRequest("User owns a store");
+            return BadRequest(new { Message = "User owns a store" });
         }
 
         [HttpPut]
@@ -57,7 +69,11 @@ namespace u_market.Controllers.Stores
             {
                 StoreLogic.Update(store);
             }
-            catch
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+            catch (Exception)
             {
                 return BadRequest(new { Message = "Something went wrong" });
             }
@@ -91,7 +107,11 @@ namespace u_market.Controllers.Stores
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+            catch (Exception)
             {
                 return BadRequest(new { Message = "Something went wrong" });
             }
@@ -107,7 +127,11 @@ namespace u_market.Controllers.Stores
                 
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+            catch (Exception)
             {
                 return BadRequest(new { Message = "Something went wrong" });
             }

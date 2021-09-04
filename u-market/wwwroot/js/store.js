@@ -295,6 +295,8 @@ const deleteProduct = productId =>
 const openSaveProductModal = async productIndex => {
     const productModal = $('#productModal');
     productModal.modal('show');
+    $(".error").text('');
+
     await setTagsSelect();
 
     if (isNaN(productIndex)) {
@@ -372,7 +374,6 @@ const closeProductModal = () => {
     $('#productModal #productDescription').val('');
     $('#productTags').find('option').remove();
     $('#productModal #productImageUrl').val('');
-    $(".error").text('');
     $('#productModal').modal('hide');
 };
 
