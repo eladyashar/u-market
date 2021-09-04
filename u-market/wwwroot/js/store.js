@@ -256,6 +256,7 @@ const generateProductsTable = async storeId => {
             detailsRow.append(`<td>${product.name}</td>`)
                 .append(`<td>${product.price}`)
                 .append(`<td>${product.description}</td>`)
+                .append(`<td>${product.tags.map(x => x.name).join(', ')}</td>`)
                 .append(`<td><img class='product-image' src='${getImageUrl(product.imageUrl)}'</td>`);
 
             const editCol = detailsRow.append('<td>').children('td:last');
@@ -276,7 +277,7 @@ const generateProductsTable = async storeId => {
 const removeProduct = async (productId) => {
     try {
         await deleteProduct(productId);
-        generateProductsTable(selectedStore.id);
+        await generateProductsTable(selectedStore.id);
     }
     catch (error) {
         alert(JSON.parse(error.responseText).message);
@@ -291,14 +292,16 @@ const deleteProduct = productId =>
         contentType: "application/json; charset=utf-8",
     });
 
-const openSaveProductModal = productIndex => {
+const openSaveProductModal = async productIndex => {
     const productModal = $('#productModal');
     productModal.modal('show');
+    await setTagsSelect();
 
     if (isNaN(productIndex)) {
         productModal.find('#productModalTitle').text('Add Product');
     }
-    else {
+    else
+    {
         fillProductDetails(selectedStore.products[productIndex]);
     }
 
@@ -313,6 +316,13 @@ const fillProductDetails = product => {
     productModal.find('#productName').val(product.name);
     productModal.find('#productPrice').val(product.price);
     productModal.find('#productDescription').val(product.description);
+
+    [...$('#productTags')[0].options].forEach((option) => {
+        if (product.tags.some(({ id }) => id === parseInt(option.value))) {
+            option.selected = true;
+        }
+    });
+
     productModal.find('#productImageUrl').val(getImageUrl(product.imageUrl));
 };
 
@@ -324,7 +334,12 @@ const saveProduct = async productIndex => {
     }
 
     try {
-        isNaN(productIndex) ? await addProduct(product) : await updateProduct(product);
+        const data = {
+            product: product,
+            tags: getSelectedTags()
+        };
+
+        isNaN(productIndex) ? await addProduct(data) : await updateProduct(data);
         closeProductModal();
         await generateProductsTable(selectedStore.id);
     }
@@ -333,26 +348,29 @@ const saveProduct = async productIndex => {
     }
 }
 
-const addProduct = product =>
-    $.ajax({
+const addProduct = async data => {
+    await $.ajax({
         url: '/Store/AddProduct/',
         type: 'PUT',
-        data: JSON.stringify(product),
+        data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
     });
+};
 
-const updateProduct = product =>
-    $.ajax({
+const updateProduct = async data => {
+    await $.ajax({
         url: '/Store/UpdateProduct/',
         type: 'PUT',
-        data: JSON.stringify(product),
+        data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
     });
+};
 
 const closeProductModal = () => {
     $('#productModal #productName').val('');
     $('#productModal #productPrice').val('');
     $('#productModal #productDescription').val('');
+    $('#productTags').find('option').remove();
     $('#productModal #productImageUrl').val('');
     $(".error").text('');
     $('#productModal').modal('hide');
@@ -364,18 +382,18 @@ const getProductDetails = productIndex => {
     const productPriceValue = productModal.find('#productPrice').val();
     const productDescriptionValue = productModal.find('#productDescription').val();
     const productImageUrlValue = productModal.find('#productImageUrl').val();
-
+   
     const product = {};
 
     if (!isNaN(productIndex)) {
         product.id = selectedStore.products[productIndex].id;
     }
 
-    product.name = productNameValue,
-    product.price = productPriceValue ? parseInt(productPriceValue) : 0,
-    product.description = productDescriptionValue,
-    product.imageUrl = productImageUrlValue,
-    product.storeId = selectedStore.id
+    product.name = productNameValue;
+    product.price = productPriceValue ? parseInt(productPriceValue) : 0;
+    product.description = productDescriptionValue;
+    product.imageUrl = productImageUrlValue;
+    product.storeId = selectedStore.id;
 
     return product;
 }
@@ -397,6 +415,30 @@ const validateProductDetails = product => {
     }
 
     return true;
+};
+
+const setTagsSelect = async () => {
+    const tags = await $.ajax({
+        url: '/Tag/GetAll',
+        type: 'GET'
+    });
+    const tagsSelect = $('#productTags');
+
+    tags.forEach(tag => {
+        tagsSelect.append(`<option value=${tag.id}>${tag.name}</option>`);
+    });
+}
+
+const getSelectedTags = () => {
+    const selectedTagsValues = [...$('#productTags')[0].options]
+        .filter(({ selected }) => selected)
+        .map(({ value, text }) => ({ value, text }));
+
+    return selectedTagsValues.map(({ value, text }) => (
+        {
+            id: parseInt(value),
+            name: text,
+        }));
 };
 
 const setProductImage = () => {

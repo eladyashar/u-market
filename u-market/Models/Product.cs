@@ -30,5 +30,9 @@ namespace u_market.Models
         public int StoreId { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
+        public Product()
+        {
+            Tags = new HashSet<Tag>();
+        }
     }
 }
