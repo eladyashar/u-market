@@ -107,6 +107,10 @@ namespace u_market.Controllers.Stores
 
                 return Ok();
             }
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
             catch (Exception)
             {
                 return BadRequest(new { Message = "Something went wrong" });
@@ -122,6 +126,10 @@ namespace u_market.Controllers.Stores
                 ProductLogic.UpdateProduct(product, tags);
                 
                 return Ok();
+            }
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
             }
             catch (Exception)
             {

@@ -4,6 +4,8 @@ using u_market.Controllers.Tags;
 using u_market.DAL;
 using u_market.Models;
 using System.Linq;
+using System;
+using u_market.Exceptions;
 
 namespace u_market.Controllers
 {
@@ -25,11 +27,44 @@ namespace u_market.Controllers
 
         public void AddProduct(Product product, List<Tag> tags)
         {
+            EnsureProduct(product, tags);
+
             Ctx.Products.Add(product);
 
             SetTagsInProduct(product, tags);
 
             Ctx.SaveChanges();
+        }
+
+        private void EnsureProduct(Product product, List<Tag> tags)
+        {
+            if (string.IsNullOrWhiteSpace(product.Name))
+            {
+                throw new ModelValidationException("Product name cannot be empty");
+            }
+
+            if (product.Price <= 0)
+            {
+                throw new ModelValidationException("Product price must be positive");
+            }
+
+            if (string.IsNullOrWhiteSpace(product.Description))
+            {
+                throw new ModelValidationException("Product description cannot be empty");
+            }
+
+            if (product.StoreId == 0)
+            {
+                throw new ModelValidationException("Product must be linked to store");
+            }
+
+            tags.ForEach(tag =>
+            {
+                if (string.IsNullOrWhiteSpace(tag.Name))
+                {
+                    throw new ModelValidationException("Product's tags must have a name");
+                }
+            });
         }
 
         private void SetTagsInProduct(Product product, List<Tag> tags)
@@ -44,6 +79,8 @@ namespace u_market.Controllers
 
         public void UpdateProduct(Product product, List<Tag> tags)
         {
+            EnsureProduct(product, tags);
+
             Ctx.Products.Update(product);
             Ctx.SaveChanges();
 
