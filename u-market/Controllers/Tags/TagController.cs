@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using u_market.DAL;
+using u_market.Exceptions;
 using u_market.Models;
 
 namespace u_market.Controllers.Tags
@@ -38,11 +39,16 @@ namespace u_market.Controllers.Tags
             try
             {
                 Logic.UpdateTag(tag);
-            } 
-            catch
+            }
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+            catch (Exception)
             {
                 return BadRequest(new { Message = "Something went wrong" });
             }
+
             return Ok();
         }
 
@@ -50,7 +56,19 @@ namespace u_market.Controllers.Tags
         [Authorize(Roles = "Admin")]
         public IActionResult Add([FromBody] Tag tag)
         {
-            Logic.AddTag(tag);
+            try
+            {
+                Logic.AddTag(tag);
+            }
+            catch (ModelValidationException ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { Message = "Something went wrong" });
+            }
+
             return Ok();
         }
 

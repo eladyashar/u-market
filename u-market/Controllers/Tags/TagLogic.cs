@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using u_market.DAL;
+using u_market.Exceptions;
 using u_market.Models;
 
 namespace u_market.Controllers.Tags
@@ -35,14 +36,24 @@ namespace u_market.Controllers.Tags
 
         public void UpdateTag(Tag tag)
         {
+            EnsureTag(tag);
             this.Ctx.Tags.Update(tag);
             this.Ctx.SaveChanges();
         }
 
         public void AddTag(Tag tag)
         {
+            EnsureTag(tag);
             this.Ctx.Tags.Add(tag);
             this.Ctx.SaveChanges();
+        }
+
+        private void EnsureTag(Tag tag)
+        {
+            if (string.IsNullOrWhiteSpace(tag.Name))
+            {
+                throw new ModelValidationException("Tag name cannot be empty");
+            }
         }
     }
 }
