@@ -74,7 +74,7 @@
                             <td>@Purchase.Product.Store.Name</td>
                             <td>@Purchase.Product.Name</td>
                             <td>@Purchase.Product.Price</td>
-                            <td>@Purchase.PurchaseDate</td>
+                            <td>@Purchase.PurchaseDate.ToLocalTime()</td>
                         </tr>
                     }
                 </tbody>
