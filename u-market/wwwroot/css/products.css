@@ -3,7 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
-    height: calc(100vh - 72px);
+    height: 70%;
 }
 
 .card-bottom {
@@ -13,7 +13,7 @@
 }
 
 .card-container {
-    height: 410px;
+    height: 425px;
     width: 200px;
     margin: 15px;
 }
