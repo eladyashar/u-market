@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using u_market.DAL;
+using u_market.Exceptions;
 using u_market.Models;
 
 namespace u_market.Controllers.Stores
@@ -44,12 +45,34 @@ namespace u_market.Controllers.Stores
         {
             store.OwnerId = user.Claims.Single(c => c.Type.Equals("Username")).Value;
 
+            EnsureStore(store);
+
             Ctx.Stores.Add(store);
             Ctx.SaveChanges();
         }
 
+        private void EnsureStore(Store store)
+        {
+            if (string.IsNullOrWhiteSpace(store.Name))
+            {
+                throw new ModelValidationException("Store name cannot be empty");
+            }
+
+            if (store.Lat == 0 && store.Lang == 0)
+            {
+                throw new ModelValidationException("Store address cannot be empty");
+            }
+
+            if (string.IsNullOrWhiteSpace(store.OwnerId))
+            {
+                throw new ModelValidationException("Store must have an owner");
+            }
+        }
+
         public void Update(Store store)
         {
+            EnsureStore(store);
+
             Ctx.Stores.Update(store);
             Ctx.SaveChanges();
         }
