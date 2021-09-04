@@ -200,11 +200,11 @@ const closeStoreModal = () => {
     $('#storeModal').modal('hide');
 };
 
-const updateStore = store =>
+const updateStore = ({ id, name, owner, address, lat, lang }) =>
     $.ajax({
         url: '/Store/Update/',
         type: 'PUT',
-        data: JSON.stringify(store),
+        data: JSON.stringify({ id, name, owner, address, lat, lang, ownerId: owner.username }),
         contentType: "application/json; charset=utf-8",
     });
 

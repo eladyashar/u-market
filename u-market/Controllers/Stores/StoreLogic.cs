@@ -72,8 +72,8 @@ namespace u_market.Controllers.Stores
         public void Update(Store store)
         {
             EnsureStore(store);
-
             Ctx.Stores.Update(store);
+
             Ctx.SaveChanges();
         }
 
