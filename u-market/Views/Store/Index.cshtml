@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="~/css/store.css" />
 
 <div class="header row">
-    <h1 class="col-8">store managment</h1>
+    <h1 class="col-8 page-title">Stores Managment</h1>
     @if (User.IsInRole("Admin"))
     {<div class="col-4">
             <div class="row">
@@ -46,12 +46,11 @@
     <div id="selectedStoreContainer">
         <label id="selectedStoreName"></label>
         <input id="search-product" placeholder="Search products by name or description" class="form-control" type="search" />
-        <button class="btn btn-primary" id="goBack">Back to store view</button>
         <table id="productsTable" class="table table-dark table-striped table-hover products-table">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">name</th>
-                    <th scope="col">price</th>
+                    <th scope="col">price (₪)</th>
                     <th scope="col">description</th>
                     <th scope="col">tags</th>
                     <th scope="col">image</th>
@@ -62,6 +61,10 @@
             <tbody id="productsTableBody">
             </tbody>
         </table>
+        <br />
+        <aside class="go-back-container">
+            <button class="btn btn-primary" id="goBack"><i class="fas fa-undo"></i></button>
+        </aside>
     </div>
 </div>
 
@@ -73,10 +76,12 @@
 <div class="modal fade" id="storeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="store-modal-title">Create Store</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            <header>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="store-modal-title">Create Store</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </header>
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="storeName" class="form-label">Store Name</label>
@@ -92,10 +97,12 @@
                 </div>
             </div>
             <label class="error"></label>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
-                <button id="submitStore" type="button" class="btn btn-primary">Save</button>
-            </div>
+            <footer>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                    <button id="submitStore" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </footer>
         </div>
     </div>
 </div>
@@ -104,17 +111,19 @@
 <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeProductModal()"></button>
-            </div>
+            <header>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeProductModal()"></button>
+                </div>
+            </header>
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="productName" class="form-label">Product Name</label>
                     <input type="text" class="form-control" id="productName" />
                 </div>
                 <div class="mb-3">
-                    <label for="productPrice" class="form-label">Product Price</label>
+                    <label for="productPrice" class="form-label">Product Price (₪)</label>
                     <input type="number" class="form-control" id="productPrice" />
                 </div>
                 <div class="mb-3">
@@ -122,7 +131,7 @@
                     <input type="text" class="form-control" id="productDescription" />
                 </div>
                 <div class="mb-3">
-                    <label for="productTags" class="form-label">Choose Tags (hold Ctrl to choose multiple tags)</label>
+                    <label for="productTags" class="form-label">Choose Tags </label><aside>(Hold Ctrl to choose multiple tags)</aside>
                     <select id="productTags" class="form-control product-tags" multiple>
                     </select>
                 </div>
@@ -134,11 +143,13 @@
                 </div>
             </div>
             <label class="error"></label>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeProductModal()">cancel</button>
-                <br/>
-                <button id="submitProduct" type="button" class="btn btn-primary">Save</button>
-            </div>
+            <footer>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeProductModal()">cancel</button>
+                    <br />
+                    <button id="submitProduct" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </footer>
         </div>
     </div>
 </div>
