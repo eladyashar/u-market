@@ -1,4 +1,14 @@
-﻿.main-appbar {
+﻿@font-face {
+    font-family: pageHeadlineFont;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.page-title {
+    font-family: pageHeadlineFont;
+}
+
+.main-appbar {
     top: 0px;
     left: 0px;
     right: 0px;

@@ -55,18 +55,19 @@
         @if (User.Identity.IsAuthenticated)
         {
             <!-- Sidebar-->
-            <div class="sidebar">                   
-                <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
-                    <li class="nav-item">
-                        <a class="nav-link border-bottom" title="Home" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Home" asp-action="Index">
-                            <i class="fas fa-store sidebar-item"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link border-bottom" title="mange stores" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Store" asp-action="Index">
-                            <i class="fas fa-warehouse sidebar-item"></i>
-                        </a>
-                    </li>
+            <div class="sidebar"> 
+                <nav>
+                    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+                        <li class="nav-item">
+                            <a class="nav-link border-bottom" title="Home" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-store sidebar-item"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link border-bottom" title="mange stores" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Store" asp-action="Index">
+                                <i class="fas fa-warehouse sidebar-item"></i>
+                            </a>
+                        </li>
                     @if (User.IsInRole("Client"))
                     {
                         <li class="nav-item">
@@ -75,30 +76,31 @@
                             </a>
                         </li>
                     }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link border-bottom" title="statistics" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Statistics" asp-action="Index">
-                                <i class="fas fa-chart-line sidebar-item"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border-bottom" title="manage users" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="UsersManagement" asp-action="Index">
-                                <i class="fas fa-users sidebar-item"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border-bottom" title="manage tags" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Tag" asp-action="Index">
-                                <i class="fas fa-tags sidebar-item"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link border-bottom" title="purchase history" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Purchase" asp-action="Index">
-                                <i class="fas fa-shopping-bag sidebar-item"></i>
-                            </a>
-                        </li>
-                    }
-                </ul>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link border-bottom" title="statistics" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Statistics" asp-action="Index">
+                                    <i class="fas fa-chart-line sidebar-item"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link border-bottom" title="manage users" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="UsersManagement" asp-action="Index">
+                                    <i class="fas fa-users sidebar-item"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link border-bottom" title="manage tags" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Tag" asp-action="Index">
+                                    <i class="fas fa-tags sidebar-item"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link border-bottom" title="purchase history" data-bs-toggle="tooltip" data-bs-placement="right" asp-controller="Purchase" asp-action="Index">
+                                    <i class="fas fa-shopping-bag sidebar-item"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
             </div>  
                     }
                     <!-- Page content-->
