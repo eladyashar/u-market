@@ -50,8 +50,8 @@ const removeUser = username => {
         success: () => {
             generateUsersTable();
         },
-        error: () => {
-            alert('an error occured');
+        error: (data) => {
+            alert(JSON.parse(data.responseText).message);
         }
     });
 };
@@ -88,8 +88,8 @@ const saveUser = userIndex => {
             $('#editUserModal').modal('hide');
             generateUsersTable();
         },
-        error: () => {
-            alert('an error occured');
+        error: (data) => {
+            alert(JSON.parse(data.responseText).message);
         }
     });
 };

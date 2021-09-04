@@ -20,8 +20,8 @@ namespace u_market.Controllers.Stores
 
         public IEnumerable<Store> GetAll(string? query)
         {
-            IQueryable<Store> stores = Ctx.Stores.Include(store => store.Owner).Include(store => store.Products);
-
+            IQueryable<Store> stores = Ctx.Stores.Include(store => store.Owner).Include(store => store.Products).ThenInclude(product => product.Tags);
+            
             if (query != null)
             {
                 stores = stores.Where(store => store.Name.Contains(query) || store.Owner.FirstName.Contains(query) || store.Owner.LastName.Contains(query));

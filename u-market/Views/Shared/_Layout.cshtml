@@ -4,18 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - u_market</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/layout.css" />
-
+    <script>
+        $(document).ready(() => {
+            const canvas = document.getElementById('logo');
+            const ctx = canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.strokeStyle = "#FFFFFF";
+            ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 4 - 2, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fillStyle = "#F0F0F0";
+            ctx.font = "23px Segoe UI";
+            ctx.textAlign = "center";
+            ctx.fillText("u market", canvas.width / 2, canvas.height / 2 + 3);
+            ctx.strokeStyle = "#FFFFFF";
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2 - 32, canvas.height / 2 + 10);
+            ctx.lineTo(canvas.width / 2 + 32, canvas.height / 2 + 10);
+            ctx.stroke();
+        })
+    </script>
 </head>
 <body>
     <!-- Top navigation-->
     <div class="main-appbar">
-        <div class="logo">
-            u_market
-        </div>
+        <canvas id="logo" width="142px" height="71px">
+        </canvas>
         @if (User.Identity.IsAuthenticated)
         {
             <p class="greeting">Hello, @User.Claims.Where(c => c.Type.Equals("FirstName")).Select(c => c.Value).Single()</p>
