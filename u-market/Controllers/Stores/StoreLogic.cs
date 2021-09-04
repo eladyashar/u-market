@@ -38,7 +38,7 @@ namespace u_market.Controllers.Stores
 
         public Store FindMyStore(String userId) 
         {
-            return Ctx.Stores.Where(s => s.OwnerId.Equals(userId)).Include(store => store.Owner).Include(store => store.Products).FirstOrDefault();
+            return Ctx.Stores.Where(s => s.OwnerId.Equals(userId)).Include(store => store.Owner).Include(store => store.Products).ThenInclude(product => product.Tags).FirstOrDefault();
         }
 
         public void Insert(Store store, ClaimsPrincipal user)
