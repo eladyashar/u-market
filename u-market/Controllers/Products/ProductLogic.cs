@@ -60,8 +60,20 @@ namespace u_market.Controllers
         private void UnsetTagsInProduct(int productId)
         {
             var product = Ctx.Products.Include(p => p.Tags).SingleOrDefault(p => p.Id == productId);
-            product.Tags.Clear();
+
+            var copiedTags = new HashSet<Tag>(product.Tags);
+
+            foreach (Tag tag in copiedTags)
+            {
+                product.Tags.Remove(tag);
+            }
+
             Ctx.SaveChanges();
+
+            foreach (Tag tag in copiedTags)
+            {
+                Ctx.Entry(tag).State = EntityState.Detached;
+            }
 
             Ctx.Entry(product).State = EntityState.Detached;
         }

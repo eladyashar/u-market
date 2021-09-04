@@ -256,6 +256,7 @@ const generateProductsTable = async storeId => {
             detailsRow.append(`<td>${product.name}</td>`)
                 .append(`<td>${product.price}`)
                 .append(`<td>${product.description}</td>`)
+                .append(`<td>${product.tags.map(x => x.name).join(', ')}</td>`)
                 .append(`<td><img class='product-image' src='${getImageUrl(product.imageUrl)}'</td>`);
 
             const editCol = detailsRow.append('<td>').children('td:last');
