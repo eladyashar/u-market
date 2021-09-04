@@ -157,5 +157,6 @@ const drawGraph = (dataType) => {
 }
 
 $(document).ready(() => {
+	document.getElementById("productAmountPieContainer").hidden = true;
     drawGraph("store");
 })
